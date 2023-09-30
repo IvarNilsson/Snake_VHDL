@@ -1,0 +1,7 @@
+venv
+vunit_out
+vivado.jou*
+vivado.log*
+vivado_*
+*.log
+.Xil
