@@ -32,25 +32,32 @@ use work.matrix_type.all;
 library vunit_lib;
 context vunit_lib.vunit_context;
 
-entity tb_lab2 is
+entity tb_top is
     generic (
         runner_cfg : string
     );
-end tb_lab2;
+end tb_top;
 
-architecture tb of tb_lab2 is
+architecture tb of tb_top is
+    constant period : time := 10 ns;
+
     signal clk : std_logic := '0';
     signal rst : std_logic := '1';
+    signal rst_avtive_low : std_logic;
     signal led : std_logic_vector(15 downto 0);
 
 begin
-   
+
+    clk <= not clk after period;
+    rst <= '0' after period * 5;
+    rst_avtive_low <= not rst;
+
     top : entity work.top
-    port map (
-        clk => clk,
-        rst => rst,
-        led => led
-    );
+        port map(
+            clk            => clk,
+            rst_avtive_low => rst_avtive_low,
+            led            => led
+        );
 
     main_p : process
     begin
