@@ -32,31 +32,38 @@ use ieee.numeric_std.all;
 library vunit_lib;
 context vunit_lib.vunit_context;
 
-entity tb_top is
+entity tb_kb_sync_edge is
     generic (
         runner_cfg : string
     );
-end tb_top;
+end tb_kb_sync_edge;
 
-architecture tb of tb_top is
+architecture tb of tb_kb_sync_edge is
     constant period : time := 10 ns;
 
-    signal clk            : std_logic := '0';
-    signal rst            : std_logic := '1';
-    signal rst_avtive_low : std_logic;
-    signal led            : std_logic_vector(15 downto 0);
+    signal clk                 : std_logic := '0';
+    signal rst                 : std_logic := '1';
+    signal kb_clk_raw          : std_logic := '0';
+    signal kb_data_raw         : std_logic := '0';
+    signal kb_clk_falling_edge : std_logic;
+    signal kb_data             : std_logic;
 
 begin
 
-    clk            <= not clk after period;
-    rst            <= '0' after period * 5;
-    rst_avtive_low <= not rst;
+    clk <= not clk after period;
+    rst <= '0' after period * 2;
 
-    top : entity work.top
+    kb_clk_raw <= not kb_clk_raw after period * 5;
+    kb_data_raw    <= kb_clk_raw;
+
+    kb_sync_edge : entity work.kb_sync_edge
         port map(
-            clk            => clk,
-            rst_avtive_low => rst_avtive_low,
-            led            => led
+            clk                 => clk,
+            rst                 => rst,
+            kb_clk_raw          => kb_clk_raw,
+            kb_data_raw         => kb_data_raw,
+            kb_clk_falling_edge => kb_clk_falling_edge,
+            kb_data             => kb_data
         );
 
     main_p : process

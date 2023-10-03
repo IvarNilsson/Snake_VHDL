@@ -19,7 +19,7 @@ set board digilentinc.com:nexys4:part0:1.1
 set ROOT [file normalize [file join [file dirname [info script]] .. ]]
 set outputdir [file join "$ROOT" vivado_files]
 file mkdir $outputdir
-create_project lab2 $outputdir -force
+create_project projekt $outputdir -force
 
 # Set Properties
 set_property board_part $board     [current_project]
@@ -29,6 +29,10 @@ set_property target_language VHDL  [current_project]
 set top_module [file join "$ROOT" src top.vhd]
 
 add_files [file join "$ROOT" src top.vhd]
+
+add_files [file join "$ROOT" src vga_controller.vhd]
+add_files [file join "$ROOT" src clk_wiz_wrapper.vhd]
+
 
 #add_files [file join "$ROOT" src lab2 binary_to_sg.vhd]
 #add_files [file join "$ROOT" src lab2 convert_scancode.vhd]
@@ -59,7 +63,7 @@ set_property file_type {VHDL 2008} [get_files  *.vhd]
 
 #set_property file_type {VHDL} [ get_files *axi_lite_slave.vhd]
 # Import Block Designs
-#source [ file normalize [ file join $ROOT scripts build_1_array zynq_bd.tcl ] ]
+source [ file normalize [ file join $ROOT scripts clk_wiz.tcl ] ]
 #source [ file normalize [ file join $ROOT scripts build_axi_full fifo_bd.tcl ] ]
 
 # Make wrapper fifo
@@ -83,7 +87,7 @@ start_gui
 launch_runs impl_1 -to_step write_bitstream -jobs 4
 wait_on_run impl_1
 
-update_compile_order -fileset sources_1
+#update_compile_order -fileset sources_1 # migt crash vivado
 
 ## launch SDK
 #file mkdir [file join "$ROOT" vivado_files acoustic_warfare.sdk]
