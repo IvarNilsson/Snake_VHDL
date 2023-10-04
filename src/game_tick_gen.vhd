@@ -36,7 +36,7 @@ begin
         next_count     <= current_count + 1;
         game_tick_edge <= '0';
 
-        if (current_count = 0) then
+        if (current_count = 1) then
             game_tick_edge <= '1';
         end if;
 

@@ -5,7 +5,7 @@ use work.matrix_type.all;
 
 entity top is
     generic (
-        countWidth : integer := 26
+        countWidth : integer := 25
     );
     port (
         sys_clk        : in std_logic;
@@ -78,6 +78,15 @@ begin
             clk            => clk_100,
             rst            => rst,
             game_tick_edge => game_tick_edge
+        );
+
+    movment_engine : entity work.movment_engine
+        port map(
+            clk            => clk_100,
+            rst            => rst,
+            game_tick_edge => game_tick_edge,
+            key_controll   => key_controll,
+            snake_matrix   => snake_matrix
         );
 
     vga_controller : entity work.vga_controller
