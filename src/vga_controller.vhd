@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.all;
 use IEEE.NUMERIC_STD.all;
 use work.matrix_type.all;
 
--- 640 x 480 60 Hz
+-- 640 x 400 60 Hz
 entity vga_controller is
     port (
         --clk_100 : in std_logic;

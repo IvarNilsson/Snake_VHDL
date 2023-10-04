@@ -1,8 +1,3 @@
--------------------------------------------------------------------------------
--- Title      : sync_keyboard.vhd 
--- Project    : Keyboard VLSI Lab
--------------------------------------------------------------------------------
-
 library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;

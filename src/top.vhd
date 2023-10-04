@@ -5,7 +5,7 @@ use work.matrix_type.all;
 
 entity top is
     generic (
-        countWidth : integer := 25
+        countWidth : integer := 23
     );
     port (
         sys_clk        : in std_logic;

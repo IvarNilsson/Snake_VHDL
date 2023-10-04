@@ -1,14 +1,3 @@
--------------------------------------------------------------------------------
--- Title      : convert_scancode.vhd 
--- Project    : Keyboard VLSI Lab
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- Description: 
--- 		        Implement a shift register to convert serial to parallel
--- 		        A counter to flag when the valid code is shifted in
---
--------------------------------------------------------------------------------
-
 library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;

@@ -68,7 +68,6 @@ begin
                 for row in 0 to 19 loop
                     temp_snake_row_right := current_snake_matrix(row);
                     next_snake_matrix(row) <= temp_snake_row_right(18 downto 0) & '0';
-                    --next_snake_matrix(row) <= temp_snake_row_right(19 downto 1) & '0';
                 end loop;
 
             end if;
