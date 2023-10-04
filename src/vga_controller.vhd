@@ -81,7 +81,7 @@ begin
 
                 temp_snake_row := snake_matrix((to_integer(current_v_cnt))/20);
 
-                if temp_snake_row((to_integer(current_h_cnt) - 40)/20) = '1' then
+                if temp_snake_row((to_integer(current_h_cnt) - 120)/20) = '1' then
                     vga_r <= x"F";
                     vga_g <= x"F";
                     vga_b <= x"F";
