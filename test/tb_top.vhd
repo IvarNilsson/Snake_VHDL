@@ -45,13 +45,15 @@ architecture tb of tb_top is
     signal clk_25  : std_logic := '0';
     signal rst     : std_logic := '1';
 
+    signal game_tick_edge : std_logic;
+
     signal vga_r  : std_logic_vector(3 downto 0);
     signal vga_g  : std_logic_vector(3 downto 0);
     signal vga_b  : std_logic_vector(3 downto 0);
     signal vga_hs : std_logic;
     signal vga_vs : std_logic;
 
-    signal snake_matrix : matrix_20_20;
+    signal snake_matrix : matrix_20_20 := (others => (others => '0'));
 
 begin
 
@@ -59,14 +61,14 @@ begin
     clk_25  <= not clk_25 after period / 2 * 4;
     rst     <= '0' after period * 5;
 
-    vga_test_gen : entity work.vga_test_gen
+    game_tick_gen : entity work.game_tick_gen
         generic map(
             countWidth => 2
         )
         port map(
-            clk          => clk_100,
-            rst          => rst,
-            snake_matrix => snake_matrix
+            clk            => clk_100,
+            rst            => rst,
+            game_tick_edge => game_tick_edge
         );
 
     vga_controller : entity work.vga_controller

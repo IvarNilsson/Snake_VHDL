@@ -506,17 +506,15 @@ set_property PACKAGE_PIN B12 [get_ports vga_vs]
 	#set_property IOSTANDARD LVCMOS33 [get_ports RsRts]
 
 
-
 ##USB HID (PS/2)
 ##Bank = 35, Pin name = IO_L13P_T2_MRCC_35,					Sch name = PS2_CLK
-#set_property PACKAGE_PIN F4 [get_ports PS2Clk]						
-	#set_property IOSTANDARD LVCMOS33 [get_ports PS2Clk]
-	#set_property PULLUP true [get_ports PS2Clk]
+set_property PACKAGE_PIN F4 [get_ports kb_clk_raw]						
+	set_property IOSTANDARD LVCMOS33 [get_ports kb_clk_raw]
+	set_property PULLUP true [get_ports kb_clk_raw]
 ##Bank = 35, Pin name = IO_L10N_T1_AD15N_35,					Sch name = PS2_DATA
-#set_property PACKAGE_PIN B2 [get_ports PS2Data]					
-	#set_property IOSTANDARD LVCMOS33 [get_ports PS2Data]	
-	#set_property PULLUP true [get_ports PS2Data]
-
+set_property PACKAGE_PIN B2 [get_ports kb_data_raw]					
+	set_property IOSTANDARD LVCMOS33 [get_ports kb_data_raw]	
+	set_property PULLUP true [get_ports kb_data_raw]
 
 
 ##SMSC Ethernet PHY
