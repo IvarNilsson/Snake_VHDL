@@ -10,13 +10,13 @@ entity movment_engine is
         rst            : in std_logic;
         game_tick_edge : in std_logic;
         key_controll   : in std_logic_vector(3 downto 0);
-        snake_matrix   : out matrix_20_20
+        snake_matrix   : out matrix_64_80
     );
 end movment_engine;
 architecture rtl of movment_engine is
 
-    signal current_snake_matrix : matrix_20_20;
-    signal next_snake_matrix    : matrix_20_20;
+    signal current_snake_matrix : matrix_64_80;
+    signal next_snake_matrix    : matrix_64_80;
 
 begin
     snake_matrix <= current_snake_matrix;
@@ -26,7 +26,7 @@ begin
         if rising_edge(clk) then
             if rst = '1' then
                 current_snake_matrix     <= (others => (others => '0'));
-                current_snake_matrix(10) <= "00000000001000000000";
+                current_snake_matrix(32) <= x"00000000010000000000";
             else
                 current_snake_matrix <= next_snake_matrix;
             end if;

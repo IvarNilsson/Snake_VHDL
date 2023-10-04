@@ -22,11 +22,11 @@ entity top is
 end top;
 
 architecture structural of top is
-    signal clk_25  : std_logic;
-    signal clk_100 : std_logic;
+    --signal clk_25  : std_logic;
+    signal clk_108 : std_logic;
     signal rst     : std_logic; -- active high
 
-    signal snake_matrix : matrix_20_20;
+    signal snake_matrix : matrix_64_80;
 
     signal game_tick_edge : std_logic;
 
@@ -43,7 +43,7 @@ begin
 
     kb_sync_edge : entity work.kb_sync_edge
         port map(
-            clk                 => clk_100,
+            clk                 => clk_108,
             rst                 => rst,
             kb_clk_raw          => kb_clk_raw,
             kb_data_raw         => kb_data_raw,
@@ -53,7 +53,7 @@ begin
 
     kb_scancode : entity work.kb_scancode
         port map(
-            clk                 => clk_100,
+            clk                 => clk_108,
             rst                 => rst,
             kb_clk_falling_edge => kb_clk_falling_edge,
             kb_data             => kb_data,
@@ -63,7 +63,7 @@ begin
 
     kb_ctrl : entity work.kb_ctrl
         port map(
-            clk             => clk_100,
+            clk             => clk_108,
             rst             => rst,
             valid_scan_code => valid_scan_code,
             scan_code_in    => scan_code,
@@ -75,14 +75,14 @@ begin
             countWidth => countWidth
         )
         port map(
-            clk            => clk_100,
+            clk            => clk_108,
             rst            => rst,
             game_tick_edge => game_tick_edge
         );
 
     movment_engine : entity work.movment_engine
         port map(
-            clk            => clk_100,
+            clk            => clk_108,
             rst            => rst,
             game_tick_edge => game_tick_edge,
             key_controll   => key_controll,
@@ -91,7 +91,7 @@ begin
 
     vga_controller : entity work.vga_controller
         port map(
-            clk_25       => clk_25,
+            clk_108      => clk_108,
             rst          => rst,
             snake_matrix => snake_matrix,
             vga_r        => vga_r,
@@ -105,8 +105,7 @@ begin
         port map(
             sys_clock => sys_clk,
             rst       => rst,
-            clk_100   => clk_100,
-            clk_25    => clk_25
+            clk_108   => clk_108
         );
 
 end architecture;

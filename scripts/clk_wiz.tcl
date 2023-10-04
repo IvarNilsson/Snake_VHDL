@@ -190,14 +190,10 @@ proc create_root_design { parentCell } {
   # Create interface ports
 
   # Create ports
-  set clk_25 [ create_bd_port -dir O -type clk clk_25 ]
+  set clk_108 [ create_bd_port -dir O -type clk clk_108 ]
   set_property -dict [ list \
-   CONFIG.FREQ_HZ {25170454} \
- ] $clk_25
-  set clk_100 [ create_bd_port -dir O -type clk clk_100 ]
-  set_property -dict [ list \
-   CONFIG.FREQ_HZ {100681818} \
- ] $clk_100
+   CONFIG.FREQ_HZ {108000000} \
+ ] $clk_108
   set rst [ create_bd_port -dir I -type rst rst ]
   set_property -dict [ list \
    CONFIG.POLARITY {ACTIVE_HIGH} \
@@ -211,29 +207,28 @@ proc create_root_design { parentCell } {
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.4 clk_wiz_0 ]
   set_property -dict [ list \
-   CONFIG.CLKOUT1_JITTER {216.609} \
-   CONFIG.CLKOUT1_PHASE_ERROR {298.577} \
-   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {100.71} \
+   CONFIG.CLKOUT1_JITTER {127.691} \
+   CONFIG.CLKOUT1_PHASE_ERROR {97.646} \
+   CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {108} \
    CONFIG.CLKOUT2_JITTER {269.944} \
    CONFIG.CLKOUT2_PHASE_ERROR {298.577} \
    CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {25.175} \
-   CONFIG.CLKOUT2_USED {true} \
+   CONFIG.CLKOUT2_USED {false} \
    CONFIG.CLK_IN1_BOARD_INTERFACE {sys_clock} \
-   CONFIG.CLK_OUT1_PORT {clk_100} \
+   CONFIG.CLK_OUT1_PORT {clk_108} \
    CONFIG.CLK_OUT2_PORT {clk_25} \
-   CONFIG.MMCM_CLKFBOUT_MULT_F {55.375} \
-   CONFIG.MMCM_CLKOUT0_DIVIDE_F {11.000} \
-   CONFIG.MMCM_CLKOUT1_DIVIDE {44} \
-   CONFIG.MMCM_DIVCLK_DIVIDE {5} \
-   CONFIG.NUM_OUT_CLKS {2} \
+   CONFIG.MMCM_CLKFBOUT_MULT_F {10.125} \
+   CONFIG.MMCM_CLKOUT0_DIVIDE_F {9.375} \
+   CONFIG.MMCM_CLKOUT1_DIVIDE {1} \
+   CONFIG.MMCM_DIVCLK_DIVIDE {1} \
+   CONFIG.NUM_OUT_CLKS {1} \
    CONFIG.RESET_BOARD_INTERFACE {reset} \
    CONFIG.USE_BOARD_FLOW {true} \
    CONFIG.USE_LOCKED {false} \
  ] $clk_wiz_0
 
   # Create port connections
-  connect_bd_net -net clk_wiz_0_clk_25 [get_bd_ports clk_25] [get_bd_pins clk_wiz_0/clk_25]
-  connect_bd_net -net clk_wiz_0_clk_100 [get_bd_ports clk_100] [get_bd_pins clk_wiz_0/clk_100]
+  connect_bd_net -net clk_wiz_0_clk_108 [get_bd_ports clk_108] [get_bd_pins clk_wiz_0/clk_108]
   connect_bd_net -net reset_1 [get_bd_ports rst] [get_bd_pins clk_wiz_0/reset]
   connect_bd_net -net sys_clock_1 [get_bd_ports sys_clock] [get_bd_pins clk_wiz_0/clk_in1]
 

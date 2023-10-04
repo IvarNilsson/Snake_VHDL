@@ -30,8 +30,6 @@ set top_module [file join "$ROOT" src top.vhd]
 
 add_files [file join "$ROOT" src top.vhd]
 
-#add_files [file join "$ROOT" src vga_test_gen.vhd]
-#add_files [file join "$ROOT" src vga_graphics.vhd]
 add_files [file join "$ROOT" src kb_sync_edge.vhd]
 add_files [file join "$ROOT" src kb_scancode.vhd]
 add_files [file join "$ROOT" src kb_ctrl.vhd]
