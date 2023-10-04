@@ -27,7 +27,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 --use std.textio.all;
 --use ieee.std_logic_textio.all;
---use work.matrix_type.all;
+use work.matrix_type.all;
 
 library vunit_lib;
 context vunit_lib.vunit_context;
@@ -41,22 +41,44 @@ end tb_top;
 architecture tb of tb_top is
     constant period : time := 10 ns;
 
-    signal clk            : std_logic := '0';
-    signal rst            : std_logic := '1';
-    signal rst_avtive_low : std_logic;
-    signal led            : std_logic_vector(15 downto 0);
+    signal clk_100 : std_logic := '0';
+    signal clk_25  : std_logic := '0';
+    signal rst     : std_logic := '1';
+
+    signal vga_r  : std_logic_vector(3 downto 0);
+    signal vga_g  : std_logic_vector(3 downto 0);
+    signal vga_b  : std_logic_vector(3 downto 0);
+    signal vga_hs : std_logic;
+    signal vga_vs : std_logic;
+
+    signal snake_matrix : matrix_20_20;
 
 begin
 
-    clk            <= not clk after period;
-    rst            <= '0' after period * 5;
-    rst_avtive_low <= not rst;
+    clk_100 <= not clk_100 after period / 2;
+    clk_25  <= not clk_25 after period / 2 * 4;
+    rst     <= '0' after period * 5;
 
-    top : entity work.top
+    vga_test_gen : entity work.vga_test_gen
+        generic map(
+            countWidth => 2
+        )
         port map(
-            clk            => clk,
-            rst_avtive_low => rst_avtive_low,
-            led            => led
+            clk          => clk_100,
+            rst          => rst,
+            snake_matrix => snake_matrix
+        );
+
+    vga_controller : entity work.vga_controller
+        port map(
+            clk_25       => clk_25,
+            rst          => rst,
+            snake_matrix => snake_matrix,
+            vga_r        => vga_r,
+            vga_g        => vga_g,
+            vga_b        => vga_b,
+            vga_hs       => vga_hs,
+            vga_vs       => vga_vs
         );
 
     main_p : process
@@ -64,6 +86,10 @@ begin
         test_runner_setup(runner, runner_cfg);
         while test_suite loop
             if run("wave") then
+
+                wait for 350000 ns;
+
+            elsif run("long") then
 
                 wait for 350000 ns;
 
