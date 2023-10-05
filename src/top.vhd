@@ -30,6 +30,7 @@ architecture structural of top is
 
     signal game_tick_edge         : std_logic;
     signal prepare_game_tick_edge : std_logic;
+    signal after_game_tick_edge   : std_logic;
 
     signal kb_clk_falling_edge : std_logic;
     signal kb_data             : std_logic;
@@ -91,7 +92,8 @@ begin
             clk                    => clk_108,
             rst                    => rst,
             prepare_game_tick_edge => prepare_game_tick_edge,
-            game_tick_edge         => game_tick_edge
+            game_tick_edge         => game_tick_edge,
+            after_game_tick_edge   => after_game_tick_edge
 
         );
 

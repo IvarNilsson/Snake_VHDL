@@ -11,7 +11,8 @@ entity game_tick_gen is
         clk                    : in std_logic;
         rst                    : in std_logic;
         prepare_game_tick_edge : out std_logic;
-        game_tick_edge         : out std_logic
+        game_tick_edge         : out std_logic;
+        after_game_tick_edge   : out std_logic
     );
 end game_tick_gen;
 architecture rtl of game_tick_gen is
@@ -37,6 +38,7 @@ begin
         next_count             <= current_count + 1;
         game_tick_edge         <= '0';
         prepare_game_tick_edge <= '0';
+        after_game_tick_edge   <= '0';
 
         if (current_count = 1) then
             prepare_game_tick_edge <= '1';
@@ -44,6 +46,10 @@ begin
 
         if (current_count = 2) then
             game_tick_edge <= '1';
+        end if;
+
+        if (current_count = 3) then
+            after_game_tick_edge <= '1';
         end if;
 
     end process;

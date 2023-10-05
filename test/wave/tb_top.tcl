@@ -10,10 +10,11 @@ for {set i 0} {$i < $nfacts} {incr i} {
 
     switch -glob -- $name {
 
-        tb_top.clk_100 -
-        tb_top.clk_25 -
+        tb_top.clk_108 -
         tb_top.rst -
         tb_top.game_tick_edge -
+        tb_top.after_game_tick_edge -
+        tb_top.prepare_game_tick_edge -
 
         tb_tb.a* {
             gtkwave::addSignalsFromList "$name"

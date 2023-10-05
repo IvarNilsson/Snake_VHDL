@@ -44,7 +44,12 @@ architecture tb of tb_top is
     signal clk_108 : std_logic := '0';
     signal rst     : std_logic := '1';
 
-    signal game_tick_edge : std_logic;
+    signal key_controll : std_logic_vector(3 downto 0);
+    signal movment      : std_logic_vector(3 downto 0);
+
+    signal game_tick_edge         : std_logic;
+    signal prepare_game_tick_edge : std_logic;
+    signal after_game_tick_edge   : std_logic;
 
     signal vga_r  : std_logic_vector(3 downto 0);
     signal vga_g  : std_logic_vector(3 downto 0);
@@ -59,15 +64,52 @@ begin
     clk_108 <= not clk_108 after period / 2;
     rst     <= '0' after period * 5;
 
+    kb_ctrl_stimuli : entity work.kb_ctrl_stimuli
+        port map(
+            clk          => clk_108,
+            rst          => rst,
+            key_controll => key_controll
+        );
+
+    kb_game_tick : entity work.kb_game_tick
+        port map(
+            clk                    => clk_108,
+            rst                    => rst,
+            prepare_game_tick_edge => prepare_game_tick_edge,
+            key_controll           => key_controll,
+            movment                => movment
+        );
+
     game_tick_gen : entity work.game_tick_gen
         generic map(
-            countWidth => 4
+            countWidth => 3
         )
+        port map(
+            clk                    => clk_108,
+            rst                    => rst,
+            prepare_game_tick_edge => prepare_game_tick_edge,
+            game_tick_edge         => game_tick_edge,
+            after_game_tick_edge   => after_game_tick_edge
+        );
+
+    movment_engine : entity work.movment_engine
         port map(
             clk            => clk_108,
             rst            => rst,
-            game_tick_edge => game_tick_edge
+            game_tick_edge => game_tick_edge,
+            movment        => movment,
+            snake_matrix   => snake_matrix
         );
+
+    --segments : entity work.segments
+    --    port map(
+    --        clk => clk_108,
+    --        rst => rst,
+    --        game_tick_edge => game_tick_edge,
+    --        movment => movment,
+    --        add_segment_edge => add_segment_edge,
+    --        snake_matrix => snake_matrix
+    --    );
 
     vga_controller : entity work.vga_controller
         port map(
@@ -80,7 +122,6 @@ begin
             vga_hs       => vga_hs,
             vga_vs       => vga_vs
         );
-
     main_p : process
     begin
         test_runner_setup(runner, runner_cfg);
