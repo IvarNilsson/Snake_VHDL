@@ -41,8 +41,7 @@ end tb_top;
 architecture tb of tb_top is
     constant period : time := 10 ns;
 
-    signal clk_100 : std_logic := '0';
-    signal clk_25  : std_logic := '0';
+    signal clk_108 : std_logic := '0';
     signal rst     : std_logic := '1';
 
     signal game_tick_edge : std_logic;
@@ -53,27 +52,26 @@ architecture tb of tb_top is
     signal vga_hs : std_logic;
     signal vga_vs : std_logic;
 
-    signal snake_matrix : matrix_20_20 := (others => (others => '0'));
+    signal snake_matrix : matrix_64_80 := (others => (others => '0'));
 
 begin
 
-    clk_100 <= not clk_100 after period / 2;
-    clk_25  <= not clk_25 after period / 2 * 4;
+    clk_108 <= not clk_108 after period / 2;
     rst     <= '0' after period * 5;
 
     game_tick_gen : entity work.game_tick_gen
         generic map(
-            countWidth => 2
+            countWidth => 4
         )
         port map(
-            clk            => clk_100,
+            clk            => clk_108,
             rst            => rst,
             game_tick_edge => game_tick_edge
         );
 
     vga_controller : entity work.vga_controller
         port map(
-            clk_25       => clk_25,
+            clk_108      => clk_108,
             rst          => rst,
             snake_matrix => snake_matrix,
             vga_r        => vga_r,

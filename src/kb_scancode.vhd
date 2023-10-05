@@ -30,14 +30,14 @@ begin
 	reg : process (clk, rst)
 	begin
 		if rising_edge(clk) then
-			current_valid_scan_code <= next_valid_scan_code;
-			current_counter         <= next_counter;
-			scan_code               <= next_scan_code;
-
 			if (rst = '1') then
 				current_valid_scan_code <= '0';
 				scan_code               <= (others => '0');
 				current_counter         <= (others => '0');
+			else
+				current_valid_scan_code <= next_valid_scan_code;
+				current_counter         <= next_counter;
+				scan_code               <= next_scan_code;
 			end if;
 		end if;
 	end process;

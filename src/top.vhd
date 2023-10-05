@@ -28,13 +28,15 @@ architecture structural of top is
 
     signal snake_matrix : matrix_64_80;
 
-    signal game_tick_edge : std_logic;
+    signal game_tick_edge         : std_logic;
+    signal prepare_game_tick_edge : std_logic;
 
     signal kb_clk_falling_edge : std_logic;
     signal kb_data             : std_logic;
     signal valid_scan_code     : std_logic;
     signal scan_code           : std_logic_vector(7 downto 0);
     signal key_controll        : std_logic_vector(3 downto 0);
+    signal movment             : std_logic_vector(3 downto 0);
 
     signal add_segment_edge : std_logic; -- not in use yet
 
@@ -72,14 +74,25 @@ begin
             key_controll    => key_controll
         );
 
+    kb_game_tick : entity work.kb_game_tick
+        port map(
+            clk                    => clk_108,
+            rst                    => rst,
+            prepare_game_tick_edge => prepare_game_tick_edge,
+            key_controll           => key_controll,
+            movment                => movment
+        );
+
     game_tick_gen : entity work.game_tick_gen
         generic map(
             countWidth => countWidth
         )
         port map(
-            clk            => clk_108,
-            rst            => rst,
-            game_tick_edge => game_tick_edge
+            clk                    => clk_108,
+            rst                    => rst,
+            prepare_game_tick_edge => prepare_game_tick_edge,
+            game_tick_edge         => game_tick_edge
+
         );
 
     movment_engine : entity work.movment_engine
@@ -87,7 +100,7 @@ begin
             clk            => clk_108,
             rst            => rst,
             game_tick_edge => game_tick_edge,
-            key_controll   => key_controll,
+            movment        => movment,
             snake_matrix   => snake_matrix
         );
 
@@ -96,7 +109,7 @@ begin
     --        clk => clk_108,
     --        rst => rst,
     --        game_tick_edge => game_tick_edge,
-    --        key_controll => key_controll,
+    --        movment => movment,
     --        add_segment_edge => add_segment_edge,
     --        snake_matrix => snake_matrix
     --    );

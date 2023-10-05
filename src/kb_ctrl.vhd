@@ -33,12 +33,12 @@ begin
     reg : process (clk, rst)
     begin
         if rising_edge(clk) then
-            valid_scan_code_d <= valid_scan_code;
-            current_state     <= next_state;
-
             if (rst = '1') then
                 valid_scan_code_d <= '1';
                 current_state     <= idle;
+            else
+                valid_scan_code_d <= valid_scan_code;
+                current_state     <= next_state;
             end if;
         end if;
     end process;

@@ -8,9 +8,10 @@ entity game_tick_gen is
         countWidth : in integer
     );
     port (
-        clk            : in std_logic;
-        rst            : in std_logic;
-        game_tick_edge : out std_logic
+        clk                    : in std_logic;
+        rst                    : in std_logic;
+        prepare_game_tick_edge : out std_logic;
+        game_tick_edge         : out std_logic
     );
 end game_tick_gen;
 architecture rtl of game_tick_gen is
@@ -33,10 +34,15 @@ begin
 
     process (current_count)
     begin
-        next_count     <= current_count + 1;
-        game_tick_edge <= '0';
+        next_count             <= current_count + 1;
+        game_tick_edge         <= '0';
+        prepare_game_tick_edge <= '0';
 
         if (current_count = 1) then
+            prepare_game_tick_edge <= '1';
+        end if;
+
+        if (current_count = 2) then
             game_tick_edge <= '1';
         end if;
 

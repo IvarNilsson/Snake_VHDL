@@ -33,6 +33,7 @@ add_files [file join "$ROOT" src top.vhd]
 add_files [file join "$ROOT" src kb_sync_edge.vhd]
 add_files [file join "$ROOT" src kb_scancode.vhd]
 add_files [file join "$ROOT" src kb_ctrl.vhd]
+add_files [file join "$ROOT" src kb_game_tick.vhd]
 
 add_files [file join "$ROOT" src game_tick_gen.vhd]
 add_files [file join "$ROOT" src segments.vhd]
