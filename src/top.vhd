@@ -36,6 +36,8 @@ architecture structural of top is
     signal scan_code           : std_logic_vector(7 downto 0);
     signal key_controll        : std_logic_vector(3 downto 0);
 
+    signal add_segment_edge : std_logic; -- not in use yet
+
 begin
     rst              <= not rst_avtive_low;
     led(15 downto 4) <= (others => rst);
@@ -88,6 +90,16 @@ begin
             key_controll   => key_controll,
             snake_matrix   => snake_matrix
         );
+
+    --segments : entity work.segments
+    --    port map(
+    --        clk => clk_108,
+    --        rst => rst,
+    --        game_tick_edge => game_tick_edge,
+    --        key_controll => key_controll,
+    --        add_segment_edge => add_segment_edge,
+    --        snake_matrix => snake_matrix
+    --    );
 
     vga_controller : entity work.vga_controller
         port map(

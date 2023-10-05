@@ -34,8 +34,8 @@ begin
     end process;
 
     process (current_snake_matrix, game_tick_edge, key_controll)
-        variable temp_snake_row_left  : std_logic_vector(19 downto 0);
-        variable temp_snake_row_right : std_logic_vector(19 downto 0);
+        variable temp_snake_row_left  : std_logic_vector(79 downto 0);
+        variable temp_snake_row_right : std_logic_vector(79 downto 0);
 
     begin
         next_snake_matrix <= current_snake_matrix;
@@ -44,30 +44,30 @@ begin
 
             -- up
             if (key_controll = "1000") then
-                for row in 0 to 18 loop
+                for row in 0 to 62 loop
                     next_snake_matrix(row) <= current_snake_matrix(row + 1);
                 end loop;
-                next_snake_matrix(19) <= (others => '0');
+                next_snake_matrix(63) <= (others => '0');
 
                 -- down
             elsif (key_controll = "0100") then
-                for row in 0 to 18 loop
+                for row in 0 to 62 loop
                     next_snake_matrix(row + 1) <= current_snake_matrix(row);
                 end loop;
                 next_snake_matrix(0) <= (others => '0');
 
                 -- left
             elsif (key_controll = "0010") then
-                for row in 0 to 19 loop
+                for row in 0 to 63 loop
                     temp_snake_row_left := current_snake_matrix(row);
-                    next_snake_matrix(row) <= '0' & temp_snake_row_left(19 downto 1);
+                    next_snake_matrix(row) <= '0' & temp_snake_row_left(79 downto 1);
                 end loop;
 
                 -- right
             elsif (key_controll = "0001") then
-                for row in 0 to 19 loop
+                for row in 0 to 63 loop
                     temp_snake_row_right := current_snake_matrix(row);
-                    next_snake_matrix(row) <= temp_snake_row_right(18 downto 0) & '0';
+                    next_snake_matrix(row) <= temp_snake_row_right(78 downto 0) & '0';
                 end loop;
 
             end if;

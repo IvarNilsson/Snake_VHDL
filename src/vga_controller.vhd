@@ -66,7 +66,7 @@ begin
     end process;
 
     rgb_comb : process (current_h_cnt, current_v_cnt, snake_matrix)
-        variable temp_snake_row : std_logic_vector(19 downto 0);
+        variable temp_snake_row : std_logic_vector(79 downto 0);
     begin
         vga_r <= (others => '0');
         vga_g <= (others => '0');
@@ -81,21 +81,21 @@ begin
                 -- border of snake segment 
                 if (current_h_cnt mod 16 = 0 or current_v_cnt mod 16 = 0) then --fix this to a 2 pixel border after test (i thin add or ... mod 16 = 15)
                     -- border
-                    vga_r <= x"93";
-                    vga_g <= x"c5";
-                    vga_b <= x"72";
+                    vga_r <= x"9";
+                    vga_g <= x"d";
+                    vga_b <= x"7";
                 else
                     -- snake
-                    vga_r <= x"2B";
-                    vga_g <= x"2D";
-                    vga_b <= x"2F";
+                    vga_r <= x"2";
+                    vga_g <= x"2";
+                    vga_b <= x"2";
                 end if;
 
             else
                 -- background
-                vga_r <= x"93";
-                vga_g <= x"c5";
-                vga_b <= x"72";
+                vga_r <= x"9";
+                vga_g <= x"d";
+                vga_b <= x"7";
             end if;
 
         end if;
