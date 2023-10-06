@@ -89,11 +89,11 @@ update_compile_order -fileset sources_1
 start_gui
 
 ## run synth
-#launch_runs synth_1 -jobs 4
+#launch_runs synth_1 
 #wait_on_run synth_1
 
 ## run impl
-launch_runs impl_1 -to_step write_bitstream -jobs 4
+launch_runs impl_1 -to_step write_bitstream -jobs 1
 wait_on_run impl_1
 
 #update_compile_order -fileset sources_1 # migt crash vivado

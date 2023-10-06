@@ -41,31 +41,31 @@ begin
 
         case current_state is
             when idle =>
-                if (current_count = 10) then
+                if (current_count = 16 - 1) then
                     next_state <= up;
                 end if;
 
             when up =>
                 key_controll <= "1000";
-                if (current_count = 20) then
+                if (current_count = 16 * 7 - 1) then
                     next_state <= left;
                 end if;
 
             when left =>
                 key_controll <= "0010";
-                if (current_count = 30) then
+                if (current_count = 16 * 13 - 1) then
                     next_state <= down;
                 end if;
 
             when down =>
                 key_controll <= "0100";
-                if (current_count = 40) then
+                if (current_count = 16 * 19 - 1) then
                     next_state <= right;
                 end if;
 
             when right =>
                 key_controll <= "0001";
-                if (current_count = 50) then
+                if (current_count = 16 * 25 - 1) then
                     next_state <= idle;
                     next_count <= 0;
                 end if;

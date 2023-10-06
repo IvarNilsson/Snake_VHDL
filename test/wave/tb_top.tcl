@@ -15,6 +15,8 @@ for {set i 0} {$i < $nfacts} {incr i} {
         tb_top.game_tick_edge -
         tb_top.after_game_tick_edge -
         tb_top.prepare_game_tick_edge -
+        tb_top.movment* -
+        tb_top.snake_* -
 
         tb_tb.a* {
             gtkwave::addSignalsFromList "$name"

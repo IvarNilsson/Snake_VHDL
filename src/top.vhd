@@ -46,6 +46,8 @@ begin
     led(15 downto 4) <= (others => rst);
     led(3 downto 0)  <= key_controll;
 
+    add_segment_edge <= '0';
+
     kb_sync_edge : entity work.kb_sync_edge
         port map(
             clk                 => clk_108,
@@ -97,24 +99,24 @@ begin
 
         );
 
-    movment_engine : entity work.movment_engine
-        port map(
-            clk            => clk_108,
-            rst            => rst,
-            game_tick_edge => game_tick_edge,
-            movment        => movment,
-            snake_matrix   => snake_matrix
-        );
-
-    --segments : entity work.segments
+    --movment_engine : entity work.movment_engine
     --    port map(
-    --        clk => clk_108,
-    --        rst => rst,
+    --        clk            => clk_108,
+    --        rst            => rst,
     --        game_tick_edge => game_tick_edge,
-    --        movment => movment,
-    --        add_segment_edge => add_segment_edge,
-    --        snake_matrix => snake_matrix
+    --        movment        => movment,
+    --        snake_matrix   => snake_matrix
     --    );
+
+    segments : entity work.segments
+        port map(
+            clk              => clk_108,
+            rst              => rst,
+            game_tick_edge   => game_tick_edge,
+            movment          => movment,
+            add_segment_edge => add_segment_edge,
+            snake_matrix     => snake_matrix
+        );
 
     vga_controller : entity work.vga_controller
         port map(
