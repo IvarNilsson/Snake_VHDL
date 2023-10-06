@@ -44,7 +44,7 @@ begin
                 current_x_array(0) <= x"28";
                 current_y_array(0) <= x"20";
                 current_size       <= 1;
-                current_add_buffer <= 0;
+                current_add_buffer <= 4;
 
             else
                 current_x_array    <= next_x_array;
@@ -82,11 +82,11 @@ begin
                     next_y_array(current_size) <= current_y_array(current_size - 1) + 1;
 
                 elsif (movment = "0010") then --left 
-                    next_x_array(current_size) <= current_x_array(current_size - 1) + 1;
+                    next_x_array(current_size) <= current_x_array(current_size - 1) - 1;
                     next_y_array(current_size) <= current_y_array(current_size - 1);
 
                 elsif (movment = "0001") then -- rigth
-                    next_x_array(current_size) <= current_x_array(current_size - 1) - 1;
+                    next_x_array(current_size) <= current_x_array(current_size - 1) + 1;
                     next_y_array(current_size) <= current_y_array(current_size - 1);
                 end if;
             else
@@ -104,11 +104,11 @@ begin
                     next_y_array(current_size - 1) <= current_y_array(current_size - 1) + 1;
 
                 elsif (movment = "0010") then --left 
-                    next_x_array(current_size - 1) <= current_x_array(current_size - 1) + 1;
+                    next_x_array(current_size - 1) <= current_x_array(current_size - 1) - 1;
                     next_y_array(current_size - 1) <= current_y_array(current_size - 1);
 
                 elsif (movment = "0001") then -- rigth
-                    next_x_array(current_size - 1) <= current_x_array(current_size - 1) - 1;
+                    next_x_array(current_size - 1) <= current_x_array(current_size - 1) + 1;
                     next_y_array(current_size - 1) <= current_y_array(current_size - 1);
                 end if;
             end if;

@@ -86,7 +86,6 @@ source [ file normalize [ file join $ROOT scripts clk_wiz.tcl ] ]
 update_compile_order -fileset sources_1
 
 ## start gui
-start_gui
 
 ## run synth
 #launch_runs synth_1 
@@ -103,3 +102,5 @@ wait_on_run impl_1
 #file copy -force [file join "$ROOT" vivado_files acoustic_warfare.runs impl_1 aw_top_lite.sysdef] [file join "$ROOT" vivado_files acoustic_warfare.sdk aw_top_lite.hdf]
 
 #launch_sdk -workspace [file join "$ROOT" vivado_files acoustic_warfare.sdk] -hwspec [file join "$ROOT" vivado_files acoustic_warfare.sdk aw_top_lite.hdf]
+
+start_gui
