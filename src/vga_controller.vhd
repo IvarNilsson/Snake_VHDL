@@ -1,21 +1,19 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
-use IEEE.NUMERIC_STD.all;
+library ieee;
+use ieee.numeric_std.all;
+use ieee.std_logic_1164.all;
 use work.matrix_type.all;
 
 -- VESA Signal 1280 x 1024 @ 60 Hz timing
 entity vga_controller is
    port (
-      clk_108 : in std_logic;
-      rst     : in std_logic;
-
-      snake_matrix : in matrix_64_80;
-
-      vga_r  : out std_logic_vector(3 downto 0);
-      vga_g  : out std_logic_vector(3 downto 0);
-      vga_b  : out std_logic_vector(3 downto 0);
-      vga_hs : out std_logic;
-      vga_vs : out std_logic
+      clk_108      : in std_logic;
+      rst          : in std_logic;
+      snake_matrix : in matrix_32_40;
+      vga_r        : out std_logic_vector(3 downto 0);
+      vga_g        : out std_logic_vector(3 downto 0);
+      vga_b        : out std_logic_vector(3 downto 0);
+      vga_hs       : out std_logic;
+      vga_vs       : out std_logic
    );
 end vga_controller;
 
@@ -66,7 +64,7 @@ begin
    end process;
 
    rgb_comb : process (current_h_cnt, current_v_cnt, snake_matrix)
-      variable temp_snake_row : std_logic_vector(79 downto 0);
+      variable temp_snake_row : std_logic_vector(39 downto 0);
    begin
       vga_r <= (others => '0');
       vga_g <= (others => '0');
@@ -74,12 +72,12 @@ begin
 
       if (current_h_cnt < 1280 and current_v_cnt < 1024) then
 
-         temp_snake_row := snake_matrix((to_integer(current_v_cnt))/16);
+         temp_snake_row := snake_matrix((to_integer(current_v_cnt))/32);
 
-         if temp_snake_row((to_integer(current_h_cnt))/16) = '1' then
+         if temp_snake_row((to_integer(current_h_cnt))/32) = '1' then
 
             -- border of snake segment 
-            if (current_h_cnt mod 16 = 0 or current_v_cnt mod 16 = 0) then --fix this to a 2 pixel border after test (i thin add or ... mod 16 = 15)
+            if (current_h_cnt mod 32 = 0 or current_v_cnt mod 32 = 0) then --fix this to a 2 pixel border after test (i thin add or ... mod 16 = 15)
                -- border
                vga_r <= x"9";
                vga_g <= x"d";

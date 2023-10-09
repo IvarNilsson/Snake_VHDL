@@ -26,7 +26,7 @@ architecture structural of top is
    signal clk_108 : std_logic;
    signal rst     : std_logic; -- active high
 
-   signal snake_matrix : matrix_64_80;
+   signal snake_matrix : matrix_32_40;
 
    signal game_tick_edge         : std_logic;
    signal prepare_game_tick_edge : std_logic;
@@ -41,12 +41,17 @@ architecture structural of top is
 
    signal add_segment_edge : std_logic; -- not in use yet
 
+   signal head_posision_x  : unsigned(5 downto 0);
+   signal head_posision_y  : unsigned(5 downto 0);
+   signal apple_posision_x : unsigned(5 downto 0);
+   signal apple_posision_y : unsigned(5 downto 0);
+
+   signal end_game_edge : std_logic;
+
 begin
    rst              <= not rst_avtive_low;
    led(15 downto 4) <= (others => rst);
    led(3 downto 0)  <= key_controll;
-
-   add_segment_edge <= '0';
 
    kb_sync_edge : entity work.kb_sync_edge
       port map(
@@ -99,23 +104,31 @@ begin
 
       );
 
-   --movment_engine : entity work.movment_engine
-   --    port map(
-   --        clk            => clk_108,
-   --        rst            => rst,
-   --        game_tick_edge => game_tick_edge,
-   --        movment        => movment,
-   --        snake_matrix   => snake_matrix
-   --    );
-
    segments : entity work.segments
       port map(
-         clk              => clk_108,
-         rst              => rst,
-         game_tick_edge   => game_tick_edge,
-         movment          => movment,
+         clk                  => clk_108,
+         rst                  => rst,
+         after_game_tick_edge => after_game_tick_edge,
+         movment              => movment,
+         add_segment_edge     => add_segment_edge,
+         head_posision_x      => head_posision_x,
+         head_posision_y      => head_posision_y,
+         snake_matrix         => snake_matrix
+      );
+
+   segments_colision : entity work.segment_colision
+      port map(
+         clk             => clk_108,
+         rst             => rst,
+         game_tick_edge  => game_tick_edge,
+         movment         => movment,
+         snake_matrix    => snake_matrix,
+         head_posision_x => head_posision_x,
+         head_posision_y => head_posision_y,
+         --apple_posision_x => apple_posision_x,
+         --apple_posision_y => apple_posision_y,
          add_segment_edge => add_segment_edge,
-         snake_matrix     => snake_matrix
+         end_game_edge    => end_game_edge
       );
 
    vga_controller : entity work.vga_controller

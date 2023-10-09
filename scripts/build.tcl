@@ -37,7 +37,7 @@ add_files [file join "$ROOT" src kb_game_tick.vhd]
 
 add_files [file join "$ROOT" src game_tick_gen.vhd]
 add_files [file join "$ROOT" src segments.vhd]
-add_files [file join "$ROOT" src movment_engine.vhd]
+add_files [file join "$ROOT" src segment_colision.vhd]
 
 add_files [file join "$ROOT" src vga_controller.vhd]
 add_files [file join "$ROOT" src clk_wiz_wrapper.vhd]
@@ -92,7 +92,7 @@ update_compile_order -fileset sources_1
 #wait_on_run synth_1
 
 ## run impl
-launch_runs impl_1 -to_step write_bitstream -jobs 1
+launch_runs impl_1 -to_step write_bitstream -jobs 4
 wait_on_run impl_1
 
 #update_compile_order -fileset sources_1 # migt crash vivado

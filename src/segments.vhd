@@ -1,39 +1,43 @@
 library ieee;
-use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.math_real.all;
+use ieee.std_logic_1164.all;
 use work.matrix_type.all;
 
 entity segments is
    port (
-      clk              : in std_logic;
-      rst              : in std_logic;
-      game_tick_edge   : in std_logic;
-      movment          : in std_logic_vector(3 downto 0);
-      add_segment_edge : in std_logic;
-      snake_matrix     : out matrix_64_80
+      clk                  : in std_logic;
+      rst                  : in std_logic;
+      after_game_tick_edge : in std_logic;
+      movment              : in std_logic_vector(3 downto 0);
+      add_segment_edge     : in std_logic;
+      head_posision_x      : out unsigned(5 downto 0);
+      head_posision_y      : out unsigned(5 downto 0);
+      snake_matrix         : out matrix_32_40
    );
 end segments;
 architecture rtl of segments is
-   constant max_segments : natural := 8;
+   constant max_segments : natural := 32;
 
-   type posision_type is array (max_segments - 1 downto 0) of unsigned(7 downto 0); -- first 8 bits row, second 8 bits col
+   type posision_type is array (max_segments - 1 downto 0) of unsigned(5 downto 0); -- only 6 bits needed
    signal current_x_array : posision_type;
    signal current_y_array : posision_type;
    signal next_x_array    : posision_type;
    signal next_y_array    : posision_type;
 
    -- size of snake
-   signal current_size : integer range 0 to max_segments;
+   signal current_size : integer range 0 to max_segments := 1;
    signal next_size    : integer range 0 to max_segments;
 
-   signal current_add_buffer : integer range 0 to 31; -- shold never get big
-   signal next_add_buffer    : integer range 0 to 31; -- shold never get big
+   signal current_add_buffer : integer range 0 to 31; -- should never get big
+   signal next_add_buffer    : integer range 0 to 31; -- should never get big
 
-   signal next_snake_matrix : matrix_64_80;
+   signal next_snake_matrix : matrix_32_40;
 
 begin
    snake_matrix <= next_snake_matrix;
+
+   head_posision_x <= current_x_array(current_size - 1);
+   head_posision_y <= current_y_array(current_size - 1);
 
    process (clk)
    begin
@@ -41,8 +45,8 @@ begin
          if rst = '1' then
             current_x_array    <= (others => (others => '0'));
             current_y_array    <= (others => (others => '0'));
-            current_x_array(0) <= x"28";
-            current_y_array(0) <= x"20";
+            current_x_array(0) <= "010100";
+            current_y_array(0) <= "010000";
             current_size       <= 1;
             current_add_buffer <= 4;
 
@@ -55,7 +59,7 @@ begin
       end if;
    end process;
 
-   process (current_add_buffer, current_x_array, current_y_array, current_size, add_segment_edge, movment, game_tick_edge)
+   process (current_add_buffer, current_x_array, current_y_array, current_size, add_segment_edge, movment, after_game_tick_edge)
    begin
       next_add_buffer <= current_add_buffer;
       next_x_array    <= current_x_array;
@@ -66,7 +70,7 @@ begin
          next_add_buffer <= current_add_buffer + 1;
       end if;
 
-      if (game_tick_edge = '1' and not(movment = "0000")) then
+      if (after_game_tick_edge = '1' and not(movment = "0000")) then
 
          if (current_add_buffer > 0) then
             -- move and add segment
@@ -113,10 +117,9 @@ begin
             end if;
          end if;
       end if;
-
    end process;
 
-   gen_matrix2 : process (current_y_array, current_x_array)
+   gen_matrix2 : process (current_y_array, current_x_array, current_size)
    begin
       next_snake_matrix <= (others => (others => '0')); -- Initialize the temporary matrix
 
