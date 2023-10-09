@@ -9,9 +9,8 @@ entity vga_controller is
       max_segments : integer := 32
    );
    port (
-      clk_108 : in std_logic;
-      rst     : in std_logic;
-      --snake_matrix : in matrix_32_40;
+      clk_108       : in std_logic;
+      rst           : in std_logic;
       apple_x       : in unsigned(5 downto 0);
       apple_y       : in unsigned(5 downto 0);
       snake_x_array : in posision_type;
@@ -124,6 +123,10 @@ begin
             vga_r <= x"2";
             vga_g <= x"2";
             vga_b <= x"2";
+         elsif (pixel_food = '1' and end_game = '1') then
+            vga_r <= x"0";
+            vga_g <= x"0";
+            vga_b <= x"0";
          elsif (pixel_food = '1') then
             vga_r <= x"f";
             vga_g <= x"0";

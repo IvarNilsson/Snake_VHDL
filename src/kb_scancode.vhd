@@ -55,7 +55,7 @@ begin
          next_scan_code(7)          <= kb_data;
 
          next_valid_scan_code <= '0';
-         if current_counter = "1000" then --might need to tweek this to "1000"
+         if current_counter = "1000" then
             next_valid_scan_code <= '1';
          end if;
 

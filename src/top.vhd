@@ -25,7 +25,6 @@ architecture structural of top is
 
    constant max_segments : integer := 128;
 
-   --signal clk_25  : std_logic;
    signal clk_108 : std_logic;
    --signal rst     : std_logic; -- active high
 
@@ -40,18 +39,11 @@ architecture structural of top is
    signal key_controll        : std_logic_vector(3 downto 0);
    signal movment             : std_logic_vector(3 downto 0);
 
-   --signal add_segment_edge : std_logic; -- not in use yet
-
    signal snake_x_array : posision_type;
    signal snake_y_array : posision_type;
    signal snake_size    : unsigned(7 downto 0);
    signal apple_x       : unsigned(5 downto 0);
    signal apple_y       : unsigned(5 downto 0);
-
-   --signal head_posision_x  : unsigned(5 downto 0);
-   --signal head_posision_y  : unsigned(5 downto 0);
-   --signal apple_posision_x : unsigned(5 downto 0);
-   --signal apple_posision_y : unsigned(5 downto 0);
 
    signal end_game : std_logic;
 
