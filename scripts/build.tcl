@@ -37,6 +37,7 @@ add_files [file join "$ROOT" src kb_ctrl.vhd]
 add_files [file join "$ROOT" src kb_game_tick.vhd]
 
 add_files [file join "$ROOT" src game_tick_gen.vhd]
+add_files [file join "$ROOT" src random_number_PRNG.vhd]
 add_files [file join "$ROOT" src segments.vhd]
 
 add_files [file join "$ROOT" src vga_controller.vhd]
