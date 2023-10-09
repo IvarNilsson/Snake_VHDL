@@ -39,14 +39,20 @@ architecture structural of top is
    signal key_controll        : std_logic_vector(3 downto 0);
    signal movment             : std_logic_vector(3 downto 0);
 
-   signal add_segment_edge : std_logic; -- not in use yet
+   --signal add_segment_edge : std_logic; -- not in use yet
 
-   signal head_posision_x  : unsigned(5 downto 0);
-   signal head_posision_y  : unsigned(5 downto 0);
-   signal apple_posision_x : unsigned(5 downto 0);
-   signal apple_posision_y : unsigned(5 downto 0);
+   signal snake_x_array : posision_type;
+   signal snake_y_array : posision_type;
+   signal snake_size    : unsigned(7 downto 0);
+   signal apple_x       : unsigned(5 downto 0);
+   signal apple_y       : unsigned(5 downto 0);
 
-   signal end_game_edge : std_logic;
+   --signal head_posision_x  : unsigned(5 downto 0);
+   --signal head_posision_y  : unsigned(5 downto 0);
+   --signal apple_posision_x : unsigned(5 downto 0);
+   --signal apple_posision_y : unsigned(5 downto 0);
+
+   --signal end_game_edge : std_logic;
 
 begin
    rst              <= not rst_avtive_low;
@@ -105,42 +111,58 @@ begin
       );
 
    segments : entity work.segments
+      generic map(
+         max_segments => 32
+      )
       port map(
          clk                  => clk_108,
          rst                  => rst,
          after_game_tick_edge => after_game_tick_edge,
          movment              => movment,
+         apple_x              => apple_x,
+         apple_y              => apple_y,
+         snake_x_array        => snake_x_array,
+         snake_y_array        => snake_y_array,
+         snake_size           => snake_size
          --add_segment_edge     => add_segment_edge,
-         head_posision_x      => head_posision_x,
-         head_posision_y      => head_posision_y,
-         snake_matrix         => snake_matrix
+         --head_posision_x      => head_posision_x,
+         --head_posision_y      => head_posision_y,
+         --snake_matrix         => snake_matrix
       );
 
-   segments_colision : entity work.segment_colision
-      port map(
-         clk             => clk_108,
-         rst             => rst,
-         game_tick_edge  => game_tick_edge,
-         movment         => movment,
-         snake_matrix    => snake_matrix,
-         head_posision_x => head_posision_x,
-         head_posision_y => head_posision_y,
-         --apple_posision_x => apple_posision_x,
-         --apple_posision_y => apple_posision_y,
-         add_segment_edge => add_segment_edge,
-         end_game_edge    => end_game_edge
-      );
+   --segments_colision : entity work.segment_colision
+   --   port map(
+   --      clk             => clk_108,
+   --      rst             => rst,
+   --      game_tick_edge  => game_tick_edge,
+   --      movment         => movment,
+   --      snake_matrix    => snake_matrix,
+   --      head_posision_x => head_posision_x,
+   --      head_posision_y => head_posision_y,
+   --      --apple_posision_x => apple_posision_x,
+   --      --apple_posision_y => apple_posision_y,
+   --      add_segment_edge => add_segment_edge,
+   --      end_game_edge    => end_game_edge
+   --   );
 
    vga_controller : entity work.vga_controller
+      generic map(
+         max_segments => 32
+      )
       port map(
-         clk_108      => clk_108,
-         rst          => rst,
-         snake_matrix => snake_matrix,
-         vga_r        => vga_r,
-         vga_g        => vga_g,
-         vga_b        => vga_b,
-         vga_hs       => vga_hs,
-         vga_vs       => vga_vs
+         clk_108 => clk_108,
+         rst     => rst,
+         --snake_matrix => snake_matrix,
+         apple_x       => apple_x,
+         apple_y       => apple_y,
+         snake_x_array => snake_x_array,
+         snake_y_array => snake_y_array,
+         snake_size    => snake_size,
+         vga_r         => vga_r,
+         vga_g         => vga_g,
+         vga_b         => vga_b,
+         vga_hs        => vga_hs,
+         vga_vs        => vga_vs
       );
 
    clk_wiz_wrapper : entity work.clk_wiz_wrapper

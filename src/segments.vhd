@@ -4,21 +4,27 @@ use ieee.std_logic_1164.all;
 use work.matrix_type.all;
 
 entity segments is
+   generic (
+      max_segments : integer := 32
+   );
    port (
       clk                  : in std_logic;
       rst                  : in std_logic;
       after_game_tick_edge : in std_logic;
       movment              : in std_logic_vector(3 downto 0);
       --add_segment_edge     : in std_logic;
-      head_posision_x : out unsigned(5 downto 0);
-      head_posision_y : out unsigned(5 downto 0);
-      snake_matrix    : out matrix_32_40
+      --head_posision_x : out unsigned(5 downto 0);
+      --head_posision_y : out unsigned(5 downto 0);
+      apple_x       : out unsigned(5 downto 0);
+      apple_y       : out unsigned(5 downto 0);
+      snake_x_array : out posision_type;
+      snake_y_array : out posision_type;
+      snake_size    : out unsigned(7 downto 0)
+      --snake_matrix    : out matrix_32_40
    );
 end segments;
 architecture rtl of segments is
-   constant max_segments : natural := 32;
 
-   type posision_type is array (max_segments - 1 downto 0) of unsigned(5 downto 0); -- only 6 bits needed
    signal current_x_array : posision_type;
    signal current_y_array : posision_type;
    signal next_x_array    : posision_type;
@@ -46,10 +52,17 @@ architecture rtl of segments is
    signal current_add_buffer : integer range 0 to 31; -- should never get big
    signal next_add_buffer    : integer range 0 to 31; -- should never get big
 
-   signal next_snake_matrix : matrix_32_40;
+   --signal next_snake_matrix : matrix_32_40;
 
 begin
-   snake_matrix <= next_snake_matrix;
+   snake_size    <= to_unsigned(current_size, 8);
+   snake_x_array <= current_x_array;
+   snake_y_array <= current_y_array;
+
+   apple_x <= current_apple_x;
+   apple_y <= current_apple_y;
+
+   --snake_matrix <= next_snake_matrix;
 
    --head_posision_x <= current_x_array(current_size - 1);
    --head_posision_y <= current_y_array(current_size - 1);
@@ -86,7 +99,7 @@ begin
       end if;
    end process;
 
-   move : process (current_add_buffer, current_x_array, current_y_array, current_size, current_add_segment, movment, after_game_tick_edge)
+   move : process (current_add_buffer, current_x_array, current_y_array, current_size, current_add_segment, movment, after_game_tick_edge, current_head_x, current_head_y)
       variable temp_head_x : unsigned(5 downto 0);
       variable temp_head_y : unsigned(5 downto 0);
    begin
@@ -124,15 +137,15 @@ begin
             next_add_buffer <= current_add_buffer - 1;
             next_size       <= current_size + 1;
 
-            next_x_array(current_size) <= next_head_x;
-            next_y_array(current_size) <= next_head_y;
+            next_x_array(current_size) <= temp_head_x;
+            next_y_array(current_size) <= temp_head_y;
          else
             --move
             next_x_array(max_segments - 2 downto 0) <= current_x_array(max_segments - 1 downto 1);
             next_y_array(max_segments - 2 downto 0) <= current_y_array(max_segments - 1 downto 1);
 
-            next_x_array(current_size - 1) <= next_head_x;
-            next_y_array(current_size - 1) <= next_head_y;
+            next_x_array(current_size - 1) <= temp_head_x;
+            next_y_array(current_size - 1) <= temp_head_y;
          end if;
       end if;
 
@@ -154,17 +167,5 @@ begin
          next_apple_x     <= current_apple_x - 1;
          next_apple_y     <= current_apple_y - 1;
       end if;
-   end process;
-
-   gen_matrix2 : process (current_y_array, current_x_array, current_size)
-   begin
-      next_snake_matrix <= (others => (others => '0')); -- Initialize the temporary matrix
-
-      for i in 0 to max_segments - 1 loop
-         if (i < current_size) then
-            next_snake_matrix(to_integer(current_y_array(i)))(to_integer(current_x_array(i))) <= '1';
-         end if;
-      end loop;
-
    end process;
 end architecture;

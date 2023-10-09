@@ -38,6 +38,13 @@ architecture tb of tb_top is
 
     signal end_game_edge : std_logic;
 
+    signal snake_x_array : posision_type;
+    signal snake_y_array : posision_type;
+    signal snake_size    : unsigned(7 downto 0);
+
+    signal apple_x : unsigned(5 downto 0);
+    signal apple_y : unsigned(5 downto 0);
+
     signal snake_matrix : matrix_32_40 := (others => (others => '0'));
 
     signal snake_0  : std_logic_vector(39 downto 0);
@@ -77,15 +84,6 @@ begin
 
     clk_108 <= not clk_108 after period / 2;
     rst     <= '0' after period * 5;
-
-    process (all)
-    begin
-        if (add_segment_edge = '1') then
-            add_segment_edge <= not add_segment_edge after period;
-        else
-            add_segment_edge <= not add_segment_edge after period * 400;
-        end if;
-    end process;
 
     snake_0  <= snake_matrix(0);
     snake_1  <= snake_matrix(1);
@@ -154,10 +152,27 @@ begin
             after_game_tick_edge => after_game_tick_edge,
             movment              => movment,
             --add_segment_edge     => add_segment_edge,
-            head_posision_x      => head_posision_x,
-            head_posision_y      => head_posision_y,
-            snake_matrix         => snake_matrix
+            --head_posision_x => head_posision_x,
+            --head_posision_y => head_posision_y,
+            apple_x       => apple_x,
+            apple_y       => apple_y,
+            snake_x_array => snake_x_array,
+            snake_y_array => snake_y_array,
+            snake_size    => snake_size
+            --snake_matrix    => snake_matrix
         );
+
+    gen_matrix2 : process (snake_x_array, snake_y_array, snake_size)
+    begin
+        snake_matrix <= (others => (others => '0')); -- Initialize the temporary matrix
+
+        for i in 0 to to_integer(snake_size - 1) loop
+            if (i < to_integer(snake_size)) then
+                snake_matrix(to_integer(snake_y_array(i)))(to_integer(snake_x_array(i))) <= '1';
+            end if;
+        end loop;
+
+    end process;
 
     --segments_colision : entity work.segment_colision
     --    port map(
@@ -176,14 +191,19 @@ begin
 
     vga_controller : entity work.vga_controller
         port map(
-            clk_108      => clk_108,
-            rst          => rst,
-            snake_matrix => snake_matrix,
-            vga_r        => vga_r,
-            vga_g        => vga_g,
-            vga_b        => vga_b,
-            vga_hs       => vga_hs,
-            vga_vs       => vga_vs
+            clk_108 => clk_108,
+            rst     => rst,
+            --snake_matrix => snake_matrix,
+            apple_x       => apple_x,
+            apple_y       => apple_y,
+            snake_x_array => snake_x_array,
+            snake_y_array => snake_y_array,
+            snake_size    => snake_size,
+            vga_r         => vga_r,
+            vga_g         => vga_g,
+            vga_b         => vga_b,
+            vga_hs        => vga_hs,
+            vga_vs        => vga_vs
         );
     main_p : process
     begin

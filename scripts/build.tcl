@@ -37,7 +37,7 @@ add_files [file join "$ROOT" src kb_game_tick.vhd]
 
 add_files [file join "$ROOT" src game_tick_gen.vhd]
 add_files [file join "$ROOT" src segments.vhd]
-add_files [file join "$ROOT" src segment_colision.vhd]
+#add_files [file join "$ROOT" src segment_colision.vhd]
 
 add_files [file join "$ROOT" src vga_controller.vhd]
 add_files [file join "$ROOT" src clk_wiz_wrapper.vhd]
