@@ -110,7 +110,7 @@ begin
          rst                  => rst,
          after_game_tick_edge => after_game_tick_edge,
          movment              => movment,
-         add_segment_edge     => add_segment_edge,
+         --add_segment_edge     => add_segment_edge,
          head_posision_x      => head_posision_x,
          head_posision_y      => head_posision_y,
          snake_matrix         => snake_matrix

@@ -153,26 +153,26 @@ begin
             rst                  => rst,
             after_game_tick_edge => after_game_tick_edge,
             movment              => movment,
-            add_segment_edge     => add_segment_edge,
+            --add_segment_edge     => add_segment_edge,
             head_posision_x      => head_posision_x,
             head_posision_y      => head_posision_y,
             snake_matrix         => snake_matrix
         );
 
-    segments_colision : entity work.segment_colision
-        port map(
-            clk             => clk_108,
-            rst             => rst,
-            game_tick_edge  => game_tick_edge,
-            movment         => movment,
-            snake_matrix    => snake_matrix,
-            head_posision_x => head_posision_x,
-            head_posision_y => head_posision_y,
-            --apple_posision_x => apple_posision_x,
-            --apple_posision_y => apple_posision_y,
-            --add_segment_edge => add_segment_edge,
-            end_game_edge => end_game_edge
-        );
+    --segments_colision : entity work.segment_colision
+    --    port map(
+    --        clk             => clk_108,
+    --        rst             => rst,
+    --        game_tick_edge  => game_tick_edge,
+    --        movment         => movment,
+    --        snake_matrix    => snake_matrix,
+    --        head_posision_x => head_posision_x,
+    --        head_posision_y => head_posision_y,
+    --        --apple_posision_x => apple_posision_x,
+    --        --apple_posision_y => apple_posision_y,
+    --        --add_segment_edge => add_segment_edge,
+    --        end_game_edge => end_game_edge
+    --    );
 
     vga_controller : entity work.vga_controller
         port map(

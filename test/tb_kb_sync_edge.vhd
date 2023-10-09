@@ -1,33 +1,6 @@
--------------------------------------------------------------------------------
--- Title      : tb_keyboard 
--- Project    : Keyboard VLSI Lab
--------------------------------------------------------------------------------
--- File       : tracking_top.vhd
--- Author     : Hemanth Prabhu
--- Company    : Lund University
--- Created    : 2013-08-17
--- Last update: 201x-0x-xx
--- Platform   : Modelsim
--------------------------------------------------------------------------------
--- Description: 
--- 		Testbench to emulate keyboard, seven segement display, led !!
--- 		Keyboard stimulus from input.txt
---		led and seven segment output is written into output_x.txt files
--- 
--------------------------------------------------------------------------------
--- Copyright (c) 2012 Lund University
--------------------------------------------------------------------------------
--- Revisions  :
--- Date        Version  Author  Description
--- 
--------------------------------------------------------------------------------
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
---use std.textio.all;
---use ieee.std_logic_textio.all;
---use work.matrix_type.all;
 
 library vunit_lib;
 context vunit_lib.vunit_context;
