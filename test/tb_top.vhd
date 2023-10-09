@@ -13,6 +13,9 @@ entity tb_top is
 end tb_top;
 
 architecture tb of tb_top is
+
+    constant max_segments : integer := 128;
+
     constant period : time := 10 ns;
 
     signal clk_108 : std_logic := '0';
@@ -36,7 +39,7 @@ architecture tb of tb_top is
     signal head_posision_x : unsigned(5 downto 0);
     signal head_posision_y : unsigned(5 downto 0);
 
-    signal end_game_edge : std_logic;
+    signal end_game : std_logic;
 
     signal snake_x_array : posision_type;
     signal snake_y_array : posision_type;
@@ -146,20 +149,20 @@ begin
         );
 
     segments : entity work.segments
+        generic map(
+            max_segments => max_segments
+        )
         port map(
             clk                  => clk_108,
             rst                  => rst,
             after_game_tick_edge => after_game_tick_edge,
             movment              => movment,
-            --add_segment_edge     => add_segment_edge,
-            --head_posision_x => head_posision_x,
-            --head_posision_y => head_posision_y,
-            apple_x       => apple_x,
-            apple_y       => apple_y,
-            snake_x_array => snake_x_array,
-            snake_y_array => snake_y_array,
-            snake_size    => snake_size
-            --snake_matrix    => snake_matrix
+            apple_x              => apple_x,
+            apple_y              => apple_y,
+            snake_x_array        => snake_x_array,
+            snake_y_array        => snake_y_array,
+            snake_size           => snake_size,
+            end_game             => end_game
         );
 
     gen_matrix2 : process (snake_x_array, snake_y_array, snake_size)
@@ -174,31 +177,19 @@ begin
 
     end process;
 
-    --segments_colision : entity work.segment_colision
-    --    port map(
-    --        clk             => clk_108,
-    --        rst             => rst,
-    --        game_tick_edge  => game_tick_edge,
-    --        movment         => movment,
-    --        snake_matrix    => snake_matrix,
-    --        head_posision_x => head_posision_x,
-    --        head_posision_y => head_posision_y,
-    --        --apple_posision_x => apple_posision_x,
-    --        --apple_posision_y => apple_posision_y,
-    --        --add_segment_edge => add_segment_edge,
-    --        end_game_edge => end_game_edge
-    --    );
-
     vga_controller : entity work.vga_controller
+        generic map(
+            max_segments => max_segments
+        )
         port map(
-            clk_108 => clk_108,
-            rst     => rst,
-            --snake_matrix => snake_matrix,
+            clk_108       => clk_108,
+            rst           => rst,
             apple_x       => apple_x,
             apple_y       => apple_y,
             snake_x_array => snake_x_array,
             snake_y_array => snake_y_array,
             snake_size    => snake_size,
+            end_game      => end_game,
             vga_r         => vga_r,
             vga_g         => vga_g,
             vga_b         => vga_b,

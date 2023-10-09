@@ -198,14 +198,14 @@ set_property PACKAGE_PIN P2 [get_ports {led[15]}]
 
 ##Buttons
 ##Bank = 15, Pin name = IO_L3P_T0_DQS_AD1P_15,				Sch name = CPU_RESET
-set_property PACKAGE_PIN C12 [get_ports rst_avtive_low]				
-	set_property IOSTANDARD LVCMOS33 [get_ports rst_avtive_low]
+#set_property PACKAGE_PIN C12 [get_ports rst_avtive_low]				
+	#set_property IOSTANDARD LVCMOS33 [get_ports rst_avtive_low]
 ##Bank = 15, Pin name = IO_L11N_T1_SRCC_15,					Sch name = BTNC
 #set_property PACKAGE_PIN E16 [get_ports btnC]						
 	#set_property IOSTANDARD LVCMOS33 [get_ports btnC]
 ##Bank = 15, Pin name = IO_L14P_T2_SRCC_15,					Sch name = BTNU
-#set_property PACKAGE_PIN F15 [get_ports btnU]						
-	#set_property IOSTANDARD LVCMOS33 [get_ports btnU]
+set_property PACKAGE_PIN F15 [get_ports rst]						
+	set_property IOSTANDARD LVCMOS33 [get_ports rst]
 ##Bank = CONFIG, Pin name = IO_L15N_T2_DQS_DOUT_CSO_B_14,	Sch name = BTNL
 #set_property PACKAGE_PIN T16 [get_ports btnL]						
 	#set_property IOSTANDARD LVCMOS33 [get_ports btnL]

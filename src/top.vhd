@@ -8,25 +8,26 @@ entity top is
       countWidth : integer := 23
    );
    port (
-      sys_clk        : in std_logic;
-      rst_avtive_low : in std_logic;
-      kb_clk_raw     : in std_logic;
-      kb_data_raw    : in std_logic;
-      led            : out std_logic_vector(15 downto 0);
-      vga_r          : out std_logic_vector(3 downto 0);
-      vga_g          : out std_logic_vector(3 downto 0);
-      vga_b          : out std_logic_vector(3 downto 0);
-      vga_hs         : out std_logic;
-      vga_vs         : out std_logic
+      sys_clk     : in std_logic;
+      rst         : in std_logic;
+      kb_clk_raw  : in std_logic;
+      kb_data_raw : in std_logic;
+      led         : out std_logic_vector(15 downto 0);
+      vga_r       : out std_logic_vector(3 downto 0);
+      vga_g       : out std_logic_vector(3 downto 0);
+      vga_b       : out std_logic_vector(3 downto 0);
+      vga_hs      : out std_logic;
+      vga_vs      : out std_logic
    );
 end top;
 
 architecture structural of top is
+
+   constant max_segments : integer := 128;
+
    --signal clk_25  : std_logic;
    signal clk_108 : std_logic;
-   signal rst     : std_logic; -- active high
-
-   signal snake_matrix : matrix_32_40;
+   --signal rst     : std_logic; -- active high
 
    signal game_tick_edge         : std_logic;
    signal prepare_game_tick_edge : std_logic;
@@ -52,11 +53,12 @@ architecture structural of top is
    --signal apple_posision_x : unsigned(5 downto 0);
    --signal apple_posision_y : unsigned(5 downto 0);
 
-   --signal end_game_edge : std_logic;
+   signal end_game : std_logic;
 
 begin
-   rst              <= not rst_avtive_low;
-   led(15 downto 4) <= (others => rst);
+   --rst              <= not rst_avtive_low;
+   led(14 downto 4) <= (others => rst);
+   led(15)          <= end_game;
    led(3 downto 0)  <= key_controll;
 
    kb_sync_edge : entity work.kb_sync_edge
@@ -112,7 +114,7 @@ begin
 
    segments : entity work.segments
       generic map(
-         max_segments => 32
+         max_segments => max_segments
       )
       port map(
          clk                  => clk_108,
@@ -123,41 +125,23 @@ begin
          apple_y              => apple_y,
          snake_x_array        => snake_x_array,
          snake_y_array        => snake_y_array,
-         snake_size           => snake_size
-         --add_segment_edge     => add_segment_edge,
-         --head_posision_x      => head_posision_x,
-         --head_posision_y      => head_posision_y,
-         --snake_matrix         => snake_matrix
+         snake_size           => snake_size,
+         end_game             => end_game
       );
-
-   --segments_colision : entity work.segment_colision
-   --   port map(
-   --      clk             => clk_108,
-   --      rst             => rst,
-   --      game_tick_edge  => game_tick_edge,
-   --      movment         => movment,
-   --      snake_matrix    => snake_matrix,
-   --      head_posision_x => head_posision_x,
-   --      head_posision_y => head_posision_y,
-   --      --apple_posision_x => apple_posision_x,
-   --      --apple_posision_y => apple_posision_y,
-   --      add_segment_edge => add_segment_edge,
-   --      end_game_edge    => end_game_edge
-   --   );
 
    vga_controller : entity work.vga_controller
       generic map(
-         max_segments => 32
+         max_segments => max_segments
       )
       port map(
-         clk_108 => clk_108,
-         rst     => rst,
-         --snake_matrix => snake_matrix,
+         clk_108       => clk_108,
+         rst           => rst,
          apple_x       => apple_x,
          apple_y       => apple_y,
          snake_x_array => snake_x_array,
          snake_y_array => snake_y_array,
          snake_size    => snake_size,
+         end_game      => end_game,
          vga_r         => vga_r,
          vga_g         => vga_g,
          vga_b         => vga_b,

@@ -17,6 +17,7 @@ entity vga_controller is
       snake_x_array : in posision_type;
       snake_y_array : in posision_type;
       snake_size    : in unsigned(7 downto 0);
+      end_game      : in std_logic;
       vga_r         : out std_logic_vector(3 downto 0);
       vga_g         : out std_logic_vector(3 downto 0);
       vga_b         : out std_logic_vector(3 downto 0);
@@ -27,7 +28,7 @@ end vga_controller;
 
 architecture rtl of vga_controller is
 
-   constant pizel_size : integer := 32;
+   constant pixel_size : integer := 32;
 
    --11 bits: 0 to 2047
    signal current_h_cnt : unsigned(10 downto 0); -- 640 (active video) + 16 (front porch) + 96 (sync_pulse) + 48 (back porch) = 800
@@ -73,49 +74,15 @@ begin
       end if;
    end process;
 
-   --rgb_comb : process (current_h_cnt, current_v_cnt, snake_matrix)
-   --   variable temp_snake_row : std_logic_vector(39 downto 0);
-   --begin
-   --   vga_r <= (others => '0');
-   --   vga_g <= (others => '0');
-   --   vga_b <= (others => '0');
-   --
-   --   if (current_h_cnt < 1280 and current_v_cnt < 1024) then
-   --
-   --      temp_snake_row := snake_matrix((to_integer(current_v_cnt))/32);
-   --
-   --      if temp_snake_row((to_integer(current_h_cnt))/32) = '1' then
-   --
-   --         -- border of snake segment 
-   --         if (current_h_cnt mod 32 = 0 or current_v_cnt mod 32 = 0) then --fix this to a 2 pixel border after test (i thin add or ... mod 16 = 15)
-   --            -- border
-   --            vga_r <= x"9";
-   --            vga_g <= x"d";
-   --            vga_b <= x"7";
-   --         else
-   --            -- snake
-   --            vga_r <= x"2";
-   --            vga_g <= x"2";
-   --            vga_b <= x"2";
-   --         end if;
-   --
-   --      else
-   --         -- background
-   --         vga_r <= x"9";
-   --         vga_g <= x"d";
-   --         vga_b <= x"7";
-   --      end if;
-   --
-   --   end if;
-   --end process;
-
    rgb_comb : process (all)
-      variable temp_x : unsigned(5 downto 0);
-      variable temp_y : unsigned(5 downto 0);
-      variable dx     : signed(10 downto 0);
-      variable dy     : signed(10 downto 0);
-      --if current pixel is belong to body or food
-      variable is_body, is_food : std_logic := '0';
+      variable temp_snake_x : signed(11 downto 0);
+      variable temp_snake_y : signed(11 downto 0);
+      variable temp_apple_x : signed(11 downto 0);
+      variable temp_apple_y : signed(11 downto 0);
+      variable dx           : signed(11 downto 0);
+      variable dy           : signed(11 downto 0);
+      variable pixel_body   : std_logic;
+      variable pixel_food   : std_logic;
    begin
       vga_r <= (others => '0');
       vga_g <= (others => '0');
@@ -125,32 +92,39 @@ begin
          vga_r <= x"9";
          vga_g <= x"d";
          vga_b <= x"7";
-         is_body := '0';
-         is_food := '0';
+
+         pixel_body := '0';
+         pixel_food := '0';
+
          for i in 0 to max_segments - 1 loop
-            temp_x := snake_x_array(i);
-            temp_y := snake_y_array(i);
-            dx     := abs(signed(current_h_cnt) - signed('0' & temp_x));
-            dy     := abs(signed(current_v_cnt) - signed('0' & temp_y));
-            if (i < snake_size) then --if is valid snake body
-               if (dx < pizel_size / 2 and dy < pizel_size / 2) then
-                  is_body := '1';
+            temp_snake_x := to_signed(to_integer(snake_x_array(i)) * pixel_size - pixel_size/2, 12);
+            temp_snake_y := to_signed(to_integer(snake_y_array(i)) * pixel_size - pixel_size/2, 12);
+            dx           := abs(signed('0' & current_h_cnt) - temp_snake_x);
+            dy           := abs(signed('0' & current_v_cnt) - temp_snake_y);
+            if (i < snake_size) then
+               if (dx < pixel_size / 2 and dy < pixel_size / 2) then
+                  pixel_body := '1';
                end if;
             end if;
          end loop;
 
-         --draw food
-         dx := abs(signed(current_h_cnt) - signed(apple_x));
-         dy := abs(signed(current_v_cnt) - signed(apple_y));
-         if (dx < pizel_size / 2 and dy < pizel_size / 2) then
-            is_food := '1';
+         temp_apple_x := to_signed(to_integer(apple_x) * pixel_size - pixel_size/2, 12);
+         temp_apple_y := to_signed(to_integer(apple_y) * pixel_size - pixel_size/2, 12);
+         dx           := abs(signed('0' & current_h_cnt) - temp_apple_x);
+         dy           := abs(signed('0' & current_v_cnt) - temp_apple_y);
+         if (dx < pixel_size / 2 and dy < pixel_size / 2) then
+            pixel_food := '1';
          end if;
 
-         if (is_body = '1') then
+         if (pixel_body = '1' and end_game = '1') then
+            vga_r <= x"F";
+            vga_g <= x"F";
+            vga_b <= x"F";
+         elsif (pixel_body = '1') then
             vga_r <= x"2";
             vga_g <= x"2";
             vga_b <= x"2";
-         elsif (is_food = '1') then
+         elsif (pixel_food = '1') then
             vga_r <= x"f";
             vga_g <= x"0";
             vga_b <= x"0";

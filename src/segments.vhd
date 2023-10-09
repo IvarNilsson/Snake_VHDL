@@ -2,7 +2,6 @@ library ieee;
 use ieee.numeric_std.all;
 use ieee.std_logic_1164.all;
 use work.matrix_type.all;
-
 entity segments is
    generic (
       max_segments : integer := 32
@@ -12,15 +11,12 @@ entity segments is
       rst                  : in std_logic;
       after_game_tick_edge : in std_logic;
       movment              : in std_logic_vector(3 downto 0);
-      --add_segment_edge     : in std_logic;
-      --head_posision_x : out unsigned(5 downto 0);
-      --head_posision_y : out unsigned(5 downto 0);
-      apple_x       : out unsigned(5 downto 0);
-      apple_y       : out unsigned(5 downto 0);
-      snake_x_array : out posision_type;
-      snake_y_array : out posision_type;
-      snake_size    : out unsigned(7 downto 0)
-      --snake_matrix    : out matrix_32_40
+      apple_x              : out unsigned(5 downto 0);
+      apple_y              : out unsigned(5 downto 0);
+      snake_x_array        : out posision_type;
+      snake_y_array        : out posision_type;
+      snake_size           : out unsigned(7 downto 0);
+      end_game             : out std_logic
    );
 end segments;
 architecture rtl of segments is
@@ -45,14 +41,11 @@ architecture rtl of segments is
    signal next_head_x    : unsigned(5 downto 0);
    signal next_head_y    : unsigned(5 downto 0);
 
-   -- size of snake
-   signal current_size : integer range 0 to max_segments := 1;
+   signal current_size : integer range 0 to max_segments; -- size of snake
    signal next_size    : integer range 0 to max_segments;
 
    signal current_add_buffer : integer range 0 to 31; -- should never get big
    signal next_add_buffer    : integer range 0 to 31; -- should never get big
-
-   --signal next_snake_matrix : matrix_32_40;
 
 begin
    snake_size    <= to_unsigned(current_size, 8);
@@ -62,10 +55,7 @@ begin
    apple_x <= current_apple_x;
    apple_y <= current_apple_y;
 
-   --snake_matrix <= next_snake_matrix;
-
-   --head_posision_x <= current_x_array(current_size - 1);
-   --head_posision_y <= current_y_array(current_size - 1);
+   end_game <= current_end;
 
    process (clk)
    begin
@@ -99,7 +89,7 @@ begin
       end if;
    end process;
 
-   move : process (current_add_buffer, current_x_array, current_y_array, current_size, current_add_segment, movment, after_game_tick_edge, current_head_x, current_head_y)
+   move : process (current_add_buffer, current_x_array, current_y_array, current_size, current_add_segment, movment, after_game_tick_edge, current_head_x, current_head_y, current_end)
       variable temp_head_x : unsigned(5 downto 0);
       variable temp_head_y : unsigned(5 downto 0);
    begin
@@ -114,7 +104,7 @@ begin
       temp_head_x := current_head_x;
       temp_head_y := current_head_y;
 
-      if (after_game_tick_edge = '1' and not(movment = "0000")) then
+      if (after_game_tick_edge = '1' and not(movment = "0000") and current_end = '0') then
          if (movment = "1000") then -- up
             temp_head_x := current_head_x;
             temp_head_y := current_head_y - 1;
@@ -153,19 +143,28 @@ begin
       next_head_y <= temp_head_y;
    end process;
 
-   colisions : process (current_end, current_head_x, current_head_y, current_apple_x, current_apple_y)
+   colisions : process (current_end, current_head_x, current_head_y, current_apple_x, current_apple_y, current_x_array, current_y_array, current_size)
    begin
       next_add_segment <= '0';
       next_end         <= current_end;
       next_apple_x     <= current_apple_x;
       next_apple_y     <= current_apple_y;
 
-      if (current_head_x >= 40 or current_head_y >= 32) then
+      if (current_head_x >= 41 or current_head_y >= 33) then
          next_end <= '1';
       elsif (current_head_x = current_apple_x and current_head_y = current_apple_y) then
          next_add_segment <= '1';
          next_apple_x     <= current_apple_x - 1;
          next_apple_y     <= current_apple_y - 1;
       end if;
+
+      for i in 0 to max_segments - 1 loop
+         if (i < current_size - 1) then
+            if (current_head_x = current_x_array(i) and current_head_y = current_y_array(i)) then
+               next_end <= '1';
+            end if;
+         end if;
+      end loop;
+
    end process;
 end architecture;

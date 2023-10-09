@@ -54,3 +54,8 @@ vunit_lib.files = [
     "venv/lib/python3.*/site-packages/vunit/vhdl/vunit_context.vhd",
     "venv/lib/python3.*/site-packages/vunit/vhdl/check/src/check.vhd"
 ]
+
+ivar.files = [
+    "src/*.vhd",
+    "test/*.vhd"
+]
