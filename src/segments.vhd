@@ -11,6 +11,8 @@ entity segments is
       rst                  : in std_logic;
       after_game_tick_edge : in std_logic;
       movment              : in std_logic_vector(3 downto 0);
+      rand_32              : in unsigned(5 downto 0);
+      rand_40              : in unsigned(5 downto 0);
       apple_x              : out unsigned(5 downto 0);
       apple_y              : out unsigned(5 downto 0);
       snake_x_array        : out posision_type;
@@ -154,8 +156,8 @@ begin
          next_end <= '1';
       elsif (current_head_x = current_apple_x and current_head_y = current_apple_y) then
          next_add_segment <= '1';
-         next_apple_x     <= current_apple_x - 1;
-         next_apple_y     <= current_apple_y - 1;
+         next_apple_x     <= rand_40;
+         next_apple_y     <= rand_32;
       end if;
 
       for i in 0 to max_segments - 1 loop

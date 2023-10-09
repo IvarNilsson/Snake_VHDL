@@ -48,6 +48,9 @@ architecture tb of tb_top is
     signal apple_x : unsigned(5 downto 0);
     signal apple_y : unsigned(5 downto 0);
 
+    signal rand_32 : unsigned(5 downto 0);
+    signal rand_40 : unsigned(5 downto 0);
+
     signal snake_matrix : matrix_32_40 := (others => (others => '0'));
 
     signal snake_0  : std_logic_vector(39 downto 0);
@@ -148,6 +151,14 @@ begin
             after_game_tick_edge   => after_game_tick_edge
         );
 
+    random_number_PRNG : entity work.random_number_PRNG
+        port map(
+            clk     => clk_108,
+            rst     => rst,
+            rand_32 => rand_32,
+            rand_40 => rand_40
+        );
+
     segments : entity work.segments
         generic map(
             max_segments => max_segments
@@ -157,6 +168,8 @@ begin
             rst                  => rst,
             after_game_tick_edge => after_game_tick_edge,
             movment              => movment,
+            rand_32              => rand_32,
+            rand_40              => rand_40,
             apple_x              => apple_x,
             apple_y              => apple_y,
             snake_x_array        => snake_x_array,
