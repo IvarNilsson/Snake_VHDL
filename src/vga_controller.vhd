@@ -99,8 +99,8 @@ begin
          for i in 0 to max_segments - 1 loop
             temp_snake_x := (snake_x_array(i) * to_unsigned(pixel_size, 6));
             temp_snake_y := (snake_y_array(i) * to_unsigned(pixel_size, 6));
-            dx           := abs(signed('0' & current_h_cnt - temp_snake_x - to_unsigned(pixel_size_half, 12)));
-            dy           := abs(signed('0' & current_v_cnt - temp_snake_y - to_unsigned(pixel_size_half, 12)));
+            dx           := abs(signed('0' & current_h_cnt - temp_snake_x + to_unsigned(pixel_size_half, 12)));
+            dy           := abs(signed('0' & current_v_cnt - temp_snake_y + to_unsigned(pixel_size_half, 12)));
             if (i < snake_size) then
                if (dx < to_signed(pixel_size_half, 12) and dy < to_signed(pixel_size_half, 12)) then
                   pixel_body := '1';
@@ -110,8 +110,8 @@ begin
 
          temp_apple_x := (apple_x * to_unsigned(pixel_size, 6));
          temp_apple_y := (apple_y * to_unsigned(pixel_size, 6));
-         dx           := abs(signed('0' & current_h_cnt - temp_apple_x - to_unsigned(pixel_size_half, 12)));
-         dy           := abs(signed('0' & current_v_cnt - temp_apple_y - to_unsigned(pixel_size_half, 12)));
+         dx           := abs(signed('0' & current_h_cnt - temp_apple_x + to_unsigned(pixel_size_half, 12)));
+         dy           := abs(signed('0' & current_v_cnt - temp_apple_y + to_unsigned(pixel_size_half, 12)));
          if (dx < to_signed(pixel_size_half, 12) and dy < to_signed(pixel_size_half, 12)) then
             pixel_food := '1';
          end if;
