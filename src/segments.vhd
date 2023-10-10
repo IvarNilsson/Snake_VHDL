@@ -7,18 +7,18 @@ entity segments is
       max_segments : integer := 32
    );
    port (
-      clk                  : in std_logic;
-      rst                  : in std_logic;
-      after_game_tick_edge : in std_logic;
-      movment              : in std_logic_vector(3 downto 0);
-      rand_32              : in unsigned(5 downto 0);
-      rand_40              : in unsigned(5 downto 0);
-      apple_x              : out unsigned(5 downto 0);
-      apple_y              : out unsigned(5 downto 0);
-      snake_x_array        : out posision_type;
-      snake_y_array        : out posision_type;
-      snake_size           : out unsigned(7 downto 0);
-      end_game             : out std_logic
+      clk            : in std_logic;
+      rst            : in std_logic;
+      game_tick_edge : in std_logic;
+      movment        : in std_logic_vector(3 downto 0);
+      rand_40        : in unsigned(5 downto 0);
+      rand_32        : in unsigned(5 downto 0);
+      apple_x        : out unsigned(5 downto 0);
+      apple_y        : out unsigned(5 downto 0);
+      snake_x_array  : out posision_type;
+      snake_y_array  : out posision_type;
+      snake_size     : out unsigned(7 downto 0);
+      end_game       : out std_logic
    );
 end segments;
 architecture rtl of segments is
@@ -65,6 +65,8 @@ begin
          if rst = '1' then
             current_x_array    <= (others => (others => '0'));
             current_y_array    <= (others => (others => '0'));
+            current_x_array(0) <= to_unsigned(20, 6);
+            current_y_array(0) <= to_unsigned(16, 6);
             current_size       <= 1;
             current_add_buffer <= 0;
             current_head_x     <= to_unsigned(20, 6);
@@ -91,7 +93,7 @@ begin
       end if;
    end process;
 
-   move : process (current_add_buffer, current_x_array, current_y_array, current_size, current_add_segment, movment, after_game_tick_edge, current_head_x, current_head_y, current_end)
+   move : process (current_add_buffer, current_x_array, current_y_array, current_size, current_add_segment, movment, game_tick_edge, current_head_x, current_head_y, current_end)
       variable temp_head_x : unsigned(5 downto 0);
       variable temp_head_y : unsigned(5 downto 0);
    begin
@@ -106,7 +108,7 @@ begin
       temp_head_x := current_head_x;
       temp_head_y := current_head_y;
 
-      if (after_game_tick_edge = '1' and not(movment = "0000") and current_end = '0') then
+      if (game_tick_edge = '1' and not(movment = "0000") and current_end = '0') then
          if (movment = "1000") then -- up
             temp_head_x := current_head_x;
             temp_head_y := current_head_y - 1;
@@ -152,12 +154,12 @@ begin
       next_apple_x     <= current_apple_x;
       next_apple_y     <= current_apple_y;
 
-      if (current_head_x >= 41 or current_head_y >= 33) then
+      if (current_head_x >= 41 or current_head_y >= 33 or current_head_x = 0 or current_head_y = 0) then
          next_end <= '1';
       elsif (current_head_x = current_apple_x and current_head_y = current_apple_y) then
          next_add_segment <= '1';
-         next_apple_x     <= rand_40;
-         next_apple_y     <= rand_32;
+         next_apple_x     <= rand_40 + 1;
+         next_apple_y     <= rand_32 + 1;
       end if;
 
       for i in 0 to max_segments - 1 loop

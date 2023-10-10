@@ -27,7 +27,8 @@ end vga_controller;
 
 architecture rtl of vga_controller is
 
-   constant pixel_size : integer := 32;
+   constant pixel_size      : integer := 32;
+   constant pixel_size_half : integer := 16;
 
    --11 bits: 0 to 2047
    signal current_h_cnt : unsigned(10 downto 0); -- 640 (active video) + 16 (front porch) + 96 (sync_pulse) + 48 (back porch) = 800
@@ -74,10 +75,10 @@ begin
    end process;
 
    rgb_comb : process (all)
-      variable temp_snake_x : signed(11 downto 0);
-      variable temp_snake_y : signed(11 downto 0);
-      variable temp_apple_x : signed(11 downto 0);
-      variable temp_apple_y : signed(11 downto 0);
+      variable temp_snake_x : unsigned(11 downto 0);
+      variable temp_snake_y : unsigned(11 downto 0);
+      variable temp_apple_x : unsigned(11 downto 0);
+      variable temp_apple_y : unsigned(11 downto 0);
       variable dx           : signed(11 downto 0);
       variable dy           : signed(11 downto 0);
       variable pixel_body   : std_logic;
@@ -96,22 +97,22 @@ begin
          pixel_food := '0';
 
          for i in 0 to max_segments - 1 loop
-            temp_snake_x := to_signed(to_integer(snake_x_array(i)) * pixel_size - pixel_size/2, 12);
-            temp_snake_y := to_signed(to_integer(snake_y_array(i)) * pixel_size - pixel_size/2, 12);
-            dx           := abs(signed('0' & current_h_cnt) - temp_snake_x);
-            dy           := abs(signed('0' & current_v_cnt) - temp_snake_y);
+            temp_snake_x := (snake_x_array(i) * to_unsigned(pixel_size, 6));
+            temp_snake_y := (snake_y_array(i) * to_unsigned(pixel_size, 6));
+            dx           := abs(signed('0' & current_h_cnt - temp_snake_x - to_unsigned(pixel_size_half, 12)));
+            dy           := abs(signed('0' & current_v_cnt - temp_snake_y - to_unsigned(pixel_size_half, 12)));
             if (i < snake_size) then
-               if (dx < pixel_size / 2 and dy < pixel_size / 2) then
+               if (dx < to_signed(pixel_size_half, 12) and dy < to_signed(pixel_size_half, 12)) then
                   pixel_body := '1';
                end if;
             end if;
          end loop;
 
-         temp_apple_x := to_signed(to_integer(apple_x) * pixel_size - pixel_size/2, 12);
-         temp_apple_y := to_signed(to_integer(apple_y) * pixel_size - pixel_size/2, 12);
-         dx           := abs(signed('0' & current_h_cnt) - temp_apple_x);
-         dy           := abs(signed('0' & current_v_cnt) - temp_apple_y);
-         if (dx < pixel_size / 2 and dy < pixel_size / 2) then
+         temp_apple_x := (apple_x * to_unsigned(pixel_size, 6));
+         temp_apple_y := (apple_y * to_unsigned(pixel_size, 6));
+         dx           := abs(signed('0' & current_h_cnt - temp_apple_x - to_unsigned(pixel_size_half, 12)));
+         dy           := abs(signed('0' & current_v_cnt - temp_apple_y - to_unsigned(pixel_size_half, 12)));
+         if (dx < to_signed(pixel_size_half, 12) and dy < to_signed(pixel_size_half, 12)) then
             pixel_food := '1';
          end if;
 

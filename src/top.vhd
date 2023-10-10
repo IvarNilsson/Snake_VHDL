@@ -5,7 +5,7 @@ use work.matrix_type.all;
 
 entity top is
    generic (
-      countWidth : integer := 23
+      countWidth : integer := 22
    );
    port (
       sys_clk     : in std_logic;
@@ -28,9 +28,9 @@ architecture structural of top is
    signal clk_108 : std_logic;
    --signal rst     : std_logic; -- active high
 
-   signal game_tick_edge         : std_logic;
    signal prepare_game_tick_edge : std_logic;
-   signal after_game_tick_edge   : std_logic;
+   signal game_tick_edge         : std_logic;
+   --signal after_game_tick_edge   : std_logic;
 
    signal kb_clk_falling_edge : std_logic;
    signal kb_data             : std_logic;
@@ -102,9 +102,8 @@ begin
          clk                    => clk_108,
          rst                    => rst,
          prepare_game_tick_edge => prepare_game_tick_edge,
-         game_tick_edge         => game_tick_edge,
-         after_game_tick_edge   => after_game_tick_edge
-
+         game_tick_edge         => game_tick_edge
+         --after_game_tick_edge   => after_game_tick_edge
       );
 
    random_number_PRNG : entity work.random_number_PRNG
@@ -120,18 +119,18 @@ begin
          max_segments => max_segments
       )
       port map(
-         clk                  => clk_108,
-         rst                  => rst,
-         after_game_tick_edge => after_game_tick_edge,
-         movment              => movment,
-         rand_32              => rand_32,
-         rand_40              => rand_40,
-         apple_x              => apple_x,
-         apple_y              => apple_y,
-         snake_x_array        => snake_x_array,
-         snake_y_array        => snake_y_array,
-         snake_size           => snake_size,
-         end_game             => end_game
+         clk            => clk_108,
+         rst            => rst,
+         game_tick_edge => game_tick_edge,
+         movment        => movment,
+         rand_32        => rand_32,
+         rand_40        => rand_40,
+         apple_x        => apple_x,
+         apple_y        => apple_y,
+         snake_x_array  => snake_x_array,
+         snake_y_array  => snake_y_array,
+         snake_size     => snake_size,
+         end_game       => end_game
       );
 
    vga_controller : entity work.vga_controller

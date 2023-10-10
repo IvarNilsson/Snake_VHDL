@@ -50,6 +50,7 @@ begin
 
       case current_state is
          when idle =>
+            key_controll <= "0000";
             if (valid_scan_code_edge = '1') then
                if (scan_code_in = up_code) then
                   next_state <= up;
