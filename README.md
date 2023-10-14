@@ -81,3 +81,5 @@ To display all of this on a VGA monitor, a custom VGA controller is used. It cou
 There are still some features that would be nice to implement, one of which is to make the apple not able to be placed wherever there is a snake segment. This could probably be done without too much hassle, but it would make the `random_number_PRNG` a bit more complicated.
 
 Another issue is the artifacts created in the `vga_controller`. It should not be too complicated, but I have not been able to fix it yet.
+
+It would also be good to continue work on the test-benches and create some automatic tests. 
