@@ -82,4 +82,4 @@ There are still some features that would be nice to implement, one of which is t
 
 Another issue is the artifacts created in the `vga_controller`. It should not be too complicated, but I have not been able to fix it yet.
 
-It would also be good to continue work on the test-benches and create some automatic tests. 
+It would also be good to continue work on the test-benches and create some automatic tests.
