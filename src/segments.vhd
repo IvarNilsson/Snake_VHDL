@@ -147,7 +147,7 @@ begin
       next_head_y <= temp_head_y;
    end process;
 
-   colisions : process (current_end, current_head_x, current_head_y, current_apple_x, current_apple_y, current_x_array, current_y_array, current_size, rand_40, rand_32)
+   collisions : process (current_end, current_head_x, current_head_y, current_apple_x, current_apple_y, current_x_array, current_y_array, current_size, rand_40, rand_32)
    begin
       next_add_segment <= '0';
       next_end         <= current_end;

@@ -57,7 +57,7 @@ begin
       end if;
    end process;
 
-   comb_states : process (current_h_cnt, current_v_cnt)
+   comb_count : process (current_h_cnt, current_v_cnt)
    begin
       next_h_cnt <= current_h_cnt + 1;
       next_v_cnt <= current_v_cnt;
