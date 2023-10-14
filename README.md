@@ -2,4 +2,4 @@
 
 ![block_diagram][link_block_diagram]
 
-[link_block_diagram]: doc/block_diagram.png
+[link_block_diagram]: doc/block_diagram.svg
