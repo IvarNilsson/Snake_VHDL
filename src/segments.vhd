@@ -9,6 +9,7 @@ entity segments is
    port (
       clk            : in std_logic;
       rst            : in std_logic;
+      sw             : in std_logic_vector(2 downto 0);
       game_tick_edge : in std_logic;
       movment        : in std_logic_vector(3 downto 0);
       rand_40        : in unsigned(5 downto 0);
@@ -72,8 +73,25 @@ begin
             current_head_x     <= to_unsigned(20, 6);
             current_head_y     <= to_unsigned(16, 6);
 
-            current_apple_x     <= to_unsigned(20, 6);
-            current_apple_y     <= to_unsigned(12, 6);
+            -- for debugging (places apples in corners)
+            --if (sw(0) = '0') then
+            current_apple_x <= to_unsigned(20, 6);
+            current_apple_y <= to_unsigned(12, 6);
+            --else
+            --   if (sw(1) = '0') then
+            --      current_apple_x <= to_unsigned(0, 6);
+            --   else
+            --      current_apple_x <= to_unsigned(39, 6);
+            --   end if;
+            --
+            --   if (sw(2) = '0') then
+            --      current_apple_y <= to_unsigned(0, 6);
+            --   else
+            --      current_apple_y <= to_unsigned(31, 6);
+            --   end if;
+            --
+            --end if;
+
             current_add_segment <= '0';
             current_end         <= '0';
 
@@ -154,12 +172,12 @@ begin
       next_apple_x     <= current_apple_x;
       next_apple_y     <= current_apple_y;
 
-      if (current_head_x >= 41 or current_head_y >= 33 or current_head_x = 0 or current_head_y = 0) then
+      if (current_head_x >= 40 or current_head_y >= 32) then --  or current_head_x = 0 or current_head_y = 0
          next_end <= '1';
       elsif (current_head_x = current_apple_x and current_head_y = current_apple_y) then
          next_add_segment <= '1';
-         next_apple_x     <= rand_40 + 1;
-         next_apple_y     <= rand_32 + 1;
+         next_apple_x     <= rand_40;
+         next_apple_y     <= rand_32;
       end if;
 
       for i in 0 to max_segments - 1 loop

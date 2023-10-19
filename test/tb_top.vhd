@@ -166,6 +166,7 @@ begin
       port map(
          clk            => clk_108,
          rst            => rst,
+         sw => (others => '0'),
          game_tick_edge => game_tick_edge,
          movment        => movment,
          rand_32        => rand_32,

@@ -5,13 +5,14 @@ use work.matrix_type.all;
 
 entity top is
    generic (
-      countWidth : integer := 22
+      countWidth : integer := 23
    );
    port (
       sys_clk     : in std_logic;
       rst         : in std_logic;
       kb_clk_raw  : in std_logic;
       kb_data_raw : in std_logic;
+      sw          : in std_logic_vector(2 downto 0);
       led         : out std_logic_vector(15 downto 0);
       vga_r       : out std_logic_vector(3 downto 0);
       vga_g       : out std_logic_vector(3 downto 0);
@@ -121,6 +122,7 @@ begin
       port map(
          clk            => clk_108,
          rst            => rst,
+         sw             => sw,
          game_tick_edge => game_tick_edge,
          movment        => movment,
          rand_32        => rand_32,
