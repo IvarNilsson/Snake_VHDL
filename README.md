@@ -74,12 +74,12 @@ All the snake movement and keeping track of all the locations of the parts of th
 
 ### vga_controller
 
-To display all of this on a VGA monitor, a custom VGA controller is used. It counts both horizontally and vertically, increasing the horizontal count each clock cycle and increasing the vertical whenever the horizontal is reset. Two sync signals are sent to the VGA monitor whenever the counter is in a specific range, which can be found at [tinyvga](http://tinyvga.com/vga-timing/1280x1024@60Hz). When both counters are in the active region, it means that this pixel is part of what is shown on the monitor. Whenever in the active region, the default value of the RGB signals is set to green. Then, it checks if this pixel is part of a segment or the apple. If it is part of a segment, the color is changed to gray, and if it is an apple pixel, the color is changed to red. If a collision is detected in the segments, then the color of the snake is changed to white and the apple to black. When calculating if the current pixel is part of a segment or an apple, the current solution is not perfect and in some cases, it can create some unwanted artifacts on the screen.
+To display all of this on a VGA monitor, a custom VGA controller is used. It counts both horizontally and vertically, increasing the horizontal count each clock cycle and increasing the vertical whenever the horizontal is reset. Two sync signals are sent to the VGA monitor whenever the counter is in a specific range, which can be found at [tinyvga](http://tinyvga.com/vga-timing/1280x1024@60Hz). When both counters are in the active region, it means that this pixel is part of what is shown on the monitor. Whenever in the active region, the default value of the RGB signals is set to green. Then, it checks if this pixel is part of a segment or the apple. If it is part of a segment, the color is changed to gray, and if it is an apple pixel, the color is changed to red. If a collision is detected in the segments, then the color of the snake is changed to white and the apple to black.
 
 ## Known problems and future work
 
 There are still some features that would be nice to implement, one of which is to make the apple not able to be placed wherever there is a snake segment. This could probably be done without too much hassle, but it would make the `random_number_PRNG` a bit more complicated.
 
-Another issue is the artifacts created in the `vga_controller`. It should not be too complicated, but I have not been able to fix it yet.
+The `vga_controller` could definatly be improved and more advanced graphics would be fun. It would also be nice to make it adjust for diffrent resolutions. This could be done eather by using a prebuilt controller and customizing the interface abit or by upgrading the current `vga_controller`.
 
 It would also be good to continue work on the test-benches and create some automatic tests.
