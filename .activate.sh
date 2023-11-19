@@ -51,7 +51,7 @@ if [ ! -d "$VENV_NAME" ]; then
 fi
 # TODO: Add explicit python min version and check
 . $VENV_NAME/bin/activate
-python --version
+python3 --version
 
 #
 # Vivado
@@ -91,8 +91,8 @@ echo "GHDL $GHDL_VERSION"
 # Useful aliases
 #
 alias clean="git clean -xdie $VENV_NAME"
-alias vunit='python $(git rev-parse --show-toplevel)/run.py -v '
-alias gtkwave='python $(git rev-parse --show-toplevel)/run.py --gtkwave-fmt vcd --gui'
+alias vunit='python3 $(git rev-parse --show-toplevel)/run.py -v '
+alias gtkwave='python3 $(git rev-parse --show-toplevel)/run.py --gtkwave-fmt vcd --gui'
 alias build='vivado -notrace -mode batch -source $(git rev-parse --show-toplevel)/scripts/build.tcl'
 
 #alias build_axi_lite='vivado -notrace -mode batch -source $(git rev-parse --show-toplevel)/scripts/build_1_array/build_1_array.tcl'
